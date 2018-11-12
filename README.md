@@ -7,4 +7,4 @@ To start with they will be Health Checks that I have built myself but going forw
 
 The first check is for checking if there is any Lorem Ipsum Content in the website. It goes under the SEO category. It doesn't have any actions to fix it, it just alerts you to it so you can check on your site.
 
-![https://github.com/prjseal/Umbraco-Health-Checks/images/loremipsumcheck.png](https://github.com/prjseal/Umbraco-Health-Checks/images/loremipsumcheck.png)
+![](/images/loremipsumcheck.png)
