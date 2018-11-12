@@ -1,8 +1,7 @@
+using Examine;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
 namespace Umbraco.Web.HealthCheck.Checks.SEO
@@ -39,11 +38,9 @@ namespace Umbraco.Web.HealthCheck.Checks.SEO
         {
             var query = "lorem ipsum dolor amet";
 
-            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
-            var searchResults = umbracoHelper.TypedSearch(query);
-            var publishedContents = searchResults as IPublishedContent[] ?? searchResults.ToArray();
-            var resultCount = publishedContents.Any() ? publishedContents.Count() : 0;
-
+            var searcher = ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+            var results = searcher.Search(query, false);
+            var resultCount = results.TotalItemCount;
             var success = resultCount == 0;
 
             StringBuilder message = new StringBuilder();
@@ -59,10 +56,10 @@ namespace Umbraco.Web.HealthCheck.Checks.SEO
                 message.Append("<br/>");
                 message.Append("<br/>");
                 message.Append("<ul>");
-                foreach (var result in publishedContents)
+                foreach (var result in results)
                 {
                     message.Append("<li>");
-                    message.AppendFormat("<strong>Id</strong>: {0}, <strong>Name</strong>: {1}, <strong>Url</strong>: {2}", result.Id, result.Name, result.Url);
+                    message.AppendFormat("<strong>Id</strong>: {0}, <strong>Name</strong>: {1}, <strong>Url</strong>: {2}", result.Id, result.Fields["nodeName"], result.Fields["urlName"]);
                     message.Append("</li>");
                 }
                 message.Append("</ul>");
