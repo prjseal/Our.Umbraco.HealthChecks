@@ -2,7 +2,7 @@ using Examine;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Umbraco.Core.Services;
+using System.Web.Configuration;
 
 namespace Umbraco.Web.HealthCheck.Checks.SEO
 {
@@ -11,11 +11,8 @@ namespace Umbraco.Web.HealthCheck.Checks.SEO
     Group = "SEO")]
     public class LoremIpsum : HealthCheck
     {
-        private readonly ILocalizedTextService _textService;
-
         public LoremIpsum(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
-            _textService = healthCheckContext.ApplicationContext.Services.TextService;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -36,18 +33,18 @@ namespace Umbraco.Web.HealthCheck.Checks.SEO
 
         private HealthCheckStatus CheckForLoremIpsumContent()
         {
-            var query = "lorem ipsum dolor amet";
+            var queryFromAppSetting = WebConfigurationManager.AppSettings["HealthCheck.SEO.LoremIpsum.SearchTerms"];
+            var query = string.IsNullOrEmpty(queryFromAppSetting) ? "lorem ipsum dolor amet" : queryFromAppSetting;
 
-            var searcher = ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+            var searcher = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
             var results = searcher.Search(query, false);
-            var resultCount = results.TotalItemCount;
-            var success = resultCount == 0;
+            var success = results.TotalItemCount == 0;
 
             StringBuilder message = new StringBuilder();
             if (success)
             {
                 message.Append("There is no content matching these search terms: ");
-                message.Append(query);
+                message.AppendFormat("<strong>{0}</strong>", query);message.AppendFormat("<strong>{0}</strong>", query);
             }
             else
             {
