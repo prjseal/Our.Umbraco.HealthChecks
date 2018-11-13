@@ -13,3 +13,5 @@
 /src/Our.Umbraco.HealthChecks.Web/Umbraco
 /src/Our.Umbraco.HealthChecks.Web/Umbraco_Client
 /src/packages
+/src/Our.Umbraco.HealthChecks/bin/Debug
+/src/Our.Umbraco.HealthChecks/obj/Debug
