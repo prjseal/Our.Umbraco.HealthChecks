@@ -9,9 +9,11 @@
 /src/Our.Umbraco.HealthChecks.Web/App_Data/NuGetBackup
 /src/Our.Umbraco.HealthChecks.Web/App_Data/Logs
 /src/Our.Umbraco.HealthChecks.Web/bin
-/src/Our.Umbraco.HealthChecks.Web/obj/Debug
+/src/Our.Umbraco.HealthChecks.Web/obj/
 /src/Our.Umbraco.HealthChecks.Web/Umbraco
 /src/Our.Umbraco.HealthChecks.Web/Umbraco_Client
 /src/packages
-/src/Our.Umbraco.HealthChecks/bin/Debug
-/src/Our.Umbraco.HealthChecks/obj/Debug
+/src/Our.Umbraco.HealthChecks/bin
+/src/Our.Umbraco.HealthChecks/obj
+/src/Our.Umbraco.HealthChecks.Web/App_Data/cache
+/src/Our.Umbraco.HealthChecks.Web/App_Data/Models

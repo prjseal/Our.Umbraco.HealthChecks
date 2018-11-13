@@ -38,7 +38,7 @@ namespace Umbraco.Web.HealthCheck.Checks.SEO
             if (success)
             {
                 message.Append("There is no content matching these search terms: ");
-                message.AppendFormat("<strong>{0}</strong>", query); message.AppendFormat("<strong>{0}</strong>", query);
+                message.AppendFormat("<strong>{0}</strong>", query);
             }
             else
             {
