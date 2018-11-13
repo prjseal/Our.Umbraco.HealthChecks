@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.HealthChecks.Web", "Our.Umbraco.HealthChecks.Web\Our.Umbraco.HealthChecks.Web.csproj", "{273829CE-93E0-42E7-9743-9A09AFC8B20B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{273829CE-93E0-42E7-9743-9A09AFC8B20B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273829CE-93E0-42E7-9743-9A09AFC8B20B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273829CE-93E0-42E7-9743-9A09AFC8B20B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273829CE-93E0-42E7-9743-9A09AFC8B20B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CE1CDA6-5C91-42D5-96A1-D74D61B8D145}
+	EndGlobalSection
+EndGlobal

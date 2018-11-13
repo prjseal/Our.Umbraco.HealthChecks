@@ -3,3 +3,13 @@
 ################################################################################
 
 /src/.vs
+/src/Our.Umbraco.HealthChecks.Web/App_Data/umbraco.config
+/src/Our.Umbraco.HealthChecks.Web/App_Data/TEMP
+/src/Our.Umbraco.HealthChecks.Web/App_Data/packages/installed
+/src/Our.Umbraco.HealthChecks.Web/App_Data/NuGetBackup
+/src/Our.Umbraco.HealthChecks.Web/App_Data/Logs
+/src/Our.Umbraco.HealthChecks.Web/bin
+/src/Our.Umbraco.HealthChecks.Web/obj/Debug
+/src/Our.Umbraco.HealthChecks.Web/Umbraco
+/src/Our.Umbraco.HealthChecks.Web/Umbraco_Client
+/src/packages
