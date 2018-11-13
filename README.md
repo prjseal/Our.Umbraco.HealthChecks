@@ -1,9 +1,12 @@
-# Umbraco-Health-Checks
-This repo is a collection of [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
+# Our.Umbraco.HealthChecks
+This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
-To start with they will be Health Checks that I have built myself but going forward I hope to get PRs from the Umbraco community too.
+Don't forget to do a NuGet restore.
 
-To try this first one out, download the file [LoremIpsum.cs](/SEO/LoremIpsum.cs) and put it in your App_Code folder.
+You can login to the website and test the health checks. Here are the login details:
+
+username: admin@admin.com
+password: 1234567890
 
 ## Lorem Ipsum Check
 
