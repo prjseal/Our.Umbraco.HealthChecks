@@ -1,7 +1,7 @@
 # Our.Umbraco.HealthChecks
 This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
-Don't forget to do a NuGet restore.
+*Don't forget to do a NuGet restore.*
 
 You can login to the website and test the health checks. Here are the login details:
 
