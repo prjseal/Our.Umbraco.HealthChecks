@@ -5,8 +5,8 @@ This repo is a collection of community written [Health Checks](https://our.umbra
 
 You can login to the website and test the health checks. Here are the login details:
 
-username: admin@admin.com
-password: 1234567890
+<strong>username:</strong> admin@admin.com<br/>
+<strong>password:</strong> 1234567890
 
 ## Lorem Ipsum Check
 
