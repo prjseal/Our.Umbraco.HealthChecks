@@ -1,6 +1,8 @@
 # Our.Umbraco.HealthChecks
 This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
+Please follow the naming of the folders and checks which are in the [Umbraco Core Health Checks](https://github.com/umbraco/Umbraco-CMS/tree/dev-v7/src/Umbraco.Web/HealthCheck/Checks)
+
 *Don't forget to do a NuGet restore.*
 
 You can login to the website and test the health checks. Here are the login details:
