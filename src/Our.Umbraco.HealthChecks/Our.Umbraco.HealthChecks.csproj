@@ -204,6 +204,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\SEO\LoremIpsumCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
