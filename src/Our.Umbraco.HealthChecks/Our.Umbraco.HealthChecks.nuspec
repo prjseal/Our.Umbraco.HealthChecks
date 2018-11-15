@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - fixed issue with generating image when preview settings not used.
+      - changed Config to Configuration to group with Core Checks
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks</tags>
