@@ -15,3 +15,36 @@ You can login to the website and test the health checks. Here are the login deta
 The first check is for checking if there is any Lorem Ipsum Content in the website. It goes under the SEO category. It doesn't have any actions to fix it, it just alerts you to it so you can check on your site.
 
 ![](/images/loremipsumcheck.png)
+
+
+## Suggested Checks
+
+If you are looking to contribute a HealthCheck - here are a few suggestions! Feel free to contribute suggestions too.
+
+### Check for TLS 1.2 or later
+
+### Check whether examine rebuild on start is off
+
+For sites with lots of content, having Examine rebuild enabled on start can really slow down boot time.
+
+### Check for an XML Sitemap
+
+### FCN Mode 
+
+Check that FCN Mode is set to Single or disabled
+
+### umbracoUseSSL Setting
+
+Check that umbracoUseSSL is set for https sites
+
+### Check Image Processor Post processor is installed
+
+Image processor post processor gives potentially huge savings in terms of image download size - by just installing the nuget package.
+
+### Check the admin user isn't called 'admin'
+
+### Check HSTS is enabled
+
+### Check urlCompression is enabled
+
+### Check HTTP Only and Secure cookies
