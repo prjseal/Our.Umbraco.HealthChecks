@@ -1,9 +1,7 @@
-﻿using Examine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web.Configuration;
 using Umbraco.Core;
 
 namespace Umbraco.Web.HealthCheck.Checks.Security
@@ -34,8 +32,8 @@ namespace Umbraco.Web.HealthCheck.Checks.Security
 
             var userService = ApplicationContext.Current.Services.UserService;
             int totalRecords = 0;
-            var users = userService.GetAll(0, int.MaxValue, out totalRecords).Where(x => x.UserType.Alias.ToLowerInvariant().Equals(userType));
-            var matchingUsers = users.Where(u => u.Name.ToLowerInvariant().Equals(userType) || u.Username.Equals(userType)).ToList();
+            var users = userService.GetAll(0, int.MaxValue, out totalRecords).Where(x => x.UserType.Alias.InvariantEquals(userType));
+            var matchingUsers = users.Where(u => u.Name.InvariantEquals(userType) || u.Username.Equals(userType)).ToList();
             var success = !matchingUsers.Any();
             if (success)
             {
