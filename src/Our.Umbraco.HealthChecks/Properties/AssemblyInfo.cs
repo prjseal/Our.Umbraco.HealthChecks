@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Our.Umbraco.HealthChecks")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Umbraco Health Check Contribution Library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Our.Umbraco")]
 [assembly: AssemblyProduct("Our.Umbraco.HealthChecks")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

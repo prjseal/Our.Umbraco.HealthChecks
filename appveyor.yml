@@ -1,0 +1,7 @@
+version: 1.0.{build}
+before_build:
+- ps: nuget restore src/Our.Umbraco.HealthChecks.Web.sln
+build:
+  project: src/Our.Umbraco.HealthChecks/Our.Umbraco.HealthChecks.csproj
+  publish_nuget: true
+  verbosity: minimal
