@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -17,3 +17,4 @@
 /src/Our.Umbraco.HealthChecks/obj
 /src/Our.Umbraco.HealthChecks.Web/App_Data/cache
 /src/Our.Umbraco.HealthChecks.Web/App_Data/Models
+src/Our.Umbraco.HealthChecks.Web/App_Plugins/
