@@ -207,6 +207,7 @@
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\SEO\LoremIpsumCheck.cs" />
+    <Compile Include="Checks\Services\ExamineRebuildOnStartCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

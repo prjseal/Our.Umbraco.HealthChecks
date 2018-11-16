@@ -5,5 +5,12 @@
         <key alias="adminUserCheckFound"><![CDATA[We found an Administrator user with the name or username '<strong>{0}</strong>']]></key>
         <key alias="adminUserRename">Please rename these users:</key>
         <key alias="adminUserUser"><![CDATA[<strong>Id</strong>: {0}, <strong>Username</strong>: {1}, <strong>Name</strong>: {2}, <strong>Email</strong>: {3}]]></key>
+
+        <key alias="examineRebuildSuccess">Examine rebuild on startup is disabled.</key>
+        <key alias="examineRebuildError">For sites with lots of content, having Examine rebuild enabled on start can really slow down boot time.</key>
+        <key alias="setExamineConfig">Fix</key>
+        <key alias="setExamineConfigDescription">This will add RebuildOnAppStart="false" to the Examine config file.</key>
+        <key alias="setExamineConfigSuccess">Successfully updated the Examine config file.</key>
+        <key alias="setExamineConfigError">Unable to update the Examine config file.</key>
     </area>
 </language>
