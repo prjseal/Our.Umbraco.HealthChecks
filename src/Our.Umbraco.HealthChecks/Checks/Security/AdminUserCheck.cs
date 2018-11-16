@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Umbraco.Core;
+using Umbraco.Core.Services;
 
 namespace Umbraco.Web.HealthCheck.Checks.Security
 {
@@ -11,8 +13,12 @@ namespace Umbraco.Web.HealthCheck.Checks.Security
     Group = "Security")]
     public class AdminUserCheck : HealthCheck
     {
+        protected readonly ILocalizedTextService TextService;
+        private const string UserTypeAlias = "admin";
+
         public AdminUserCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
+            TextService = healthCheckContext.ApplicationContext.Services.TextService;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -28,35 +34,33 @@ namespace Umbraco.Web.HealthCheck.Checks.Security
         private HealthCheckStatus CheckAdminUser()
         {
             StringBuilder message = new StringBuilder();
-            const string userType = "admin";
 
             var userService = ApplicationContext.Current.Services.UserService;
             int totalRecords = 0;
-            var users = userService.GetAll(0, int.MaxValue, out totalRecords).Where(x => x.UserType.Alias.InvariantEquals(userType));
-            var matchingUsers = users.Where(u => u.Name.InvariantEquals(userType) || u.Username.InvariantEquals(userType)).ToList();
+            var users = userService.GetAll(0, int.MaxValue, out totalRecords).Where(x => x.UserType.Alias.InvariantEquals(UserTypeAlias));
+            var matchingUsers = users.Where(u => u.Name.InvariantEquals(UserTypeAlias) || u.Username.InvariantEquals(UserTypeAlias)).ToList();
             var success = !matchingUsers.Any();
             if (success)
             {
-                message.AppendFormat("There are no Administrator users with the name or username '<strong>{0}</strong>'", userType);
+                message.AppendFormat(TextService.Localize("Our.Umbraco.HealthChecks/adminUserCheckNotFound"), UserTypeAlias);
             }
             else
             {
-                message.AppendFormat("We found an Administrator user with the name or username '<strong>{0}</strong>'", userType);
+                message.AppendFormat(TextService.Localize("Our.Umbraco.HealthChecks/adminUserCheckFound"), UserTypeAlias);
                 message.Append("<br/>");
                 message.Append("<br/>");
-                message.Append("Please rename these users:");
+                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/adminUserRename"));
                 message.Append("<br/>");
                 message.Append("<br/>");
                 message.Append("<ul>");
                 foreach (var user in matchingUsers)
                 {
                     message.Append("<li>");
-                    message.AppendFormat("<strong>Id</strong>: {0}, <strong>Username</strong>: {1}, <strong>Name</strong>: {2}, <strong>Email</strong>: {3}", user.Id, user.Username, user.Name, user.Email);
+                    message.AppendFormat(TextService.Localize("Our.Umbraco.HealthChecks/adminUserUser"), user.Id, user.Username, user.Name, user.Email);
                     message.Append("</li>");
                 }
                 message.Append("</ul>");
 
-                
             }
 
             var actions = new List<HealthCheckAction>();
