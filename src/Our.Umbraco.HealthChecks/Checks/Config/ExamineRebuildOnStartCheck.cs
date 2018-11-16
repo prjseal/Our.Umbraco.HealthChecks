@@ -9,7 +9,7 @@ using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 using Umbraco.Web.HealthCheck.Checks.Config;
 
-namespace Our.Umbraco.HealthChecks.Checks.Services
+namespace Our.Umbraco.HealthChecks.Checks.Config
 {
     [HealthCheck("4e5064b2-e0d1-4945-9a26-f42026080701", "Examine Rebuild On Startup",
     Description = "Check whether examine rebuild on start is off",

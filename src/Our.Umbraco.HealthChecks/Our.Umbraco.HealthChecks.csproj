@@ -207,7 +207,7 @@
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\SEO\LoremIpsumCheck.cs" />
-    <Compile Include="Checks\Services\ExamineRebuildOnStartCheck.cs" />
+    <Compile Include="Checks\Config\ExamineRebuildOnStartCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-GB.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Checks\Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
