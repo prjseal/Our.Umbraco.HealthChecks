@@ -27,6 +27,8 @@ The first check is for checking if there is any Lorem Ipsum Content in the websi
 
 If you are looking to contribute a HealthCheck - here are a few suggestions! Feel free to contribute suggestions too.
 
+Go to the [issues page](https://github.com/prjseal/Our.Umbraco.HealthChecks/issues) to suggest checks and see the checks up for grabs
+
 ### Check for TLS 1.2 or later
 
 ### Check whether examine rebuild on start is off
