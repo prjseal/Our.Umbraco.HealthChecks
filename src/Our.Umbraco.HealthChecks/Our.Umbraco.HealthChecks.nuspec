@@ -12,8 +12,8 @@
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks</tags>
-    <files>
-      <file src="App_Plugins\Our.Umbraco.HealthChecks\**\*.*" target="content\App_Plugins\Our.Umbraco.HealthChecks" />
-    </files>
   </metadata>
+  <files>
+    <file src="App_Plugins\Our.Umbraco.HealthChecks\**\*.*" target="content\App_Plugins\Our.Umbraco.HealthChecks" />
+  </files>
 </package>
