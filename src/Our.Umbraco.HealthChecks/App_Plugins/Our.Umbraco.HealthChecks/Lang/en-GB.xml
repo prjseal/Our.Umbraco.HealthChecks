@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
+    <area alias="Our.Umbraco.HealthChecks">
+        <key alias="adminUserCheckNotFound"><![CDATA[There are no Administrator users with the name or username '<strong>{0}</strong>']]></key>
+        <key alias="adminUserCheckFound"><![CDATA[We found an Administrator user with the name or username '<strong>{0}</strong>']]></key>
+        <key alias="adminUserRename">Please rename these users:</key>
+        <key alias="adminUserUser"><![CDATA[<strong>Id</strong>: {0}, <strong>Username</strong>: {1}, <strong>Name</strong>: {2}, <strong>Email</strong>: {3}]]></key>
+    </area>
+</language>

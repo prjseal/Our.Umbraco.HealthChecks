@@ -36,15 +36,9 @@ For sites with lots of content, having Examine rebuild enabled on start can real
 
 Check that FCN Mode is set to Single or disabled
 
-### umbracoUseSSL Setting
-
-Check that umbracoUseSSL is set for https sites
-
 ### Check Image Processor Post processor is installed
 
 Image processor post processor gives potentially huge savings in terms of image download size - by just installing the nuget package.
-
-### Check the admin user isn't called 'admin'
 
 ### Check HSTS is enabled
 
