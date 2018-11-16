@@ -1,16 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
-    <area alias="Our.Umbraco.HealthChecks">
-        <key alias="adminUserCheckNotFound"><![CDATA[There are no Administrator users with the name or username '<strong>{0}</strong>']]></key>
-        <key alias="adminUserCheckFound"><![CDATA[We found an Administrator user with the name or username '<strong>{0}</strong>']]></key>
-        <key alias="adminUserRename">Please rename these users:</key>
-        <key alias="adminUserUser"><![CDATA[<strong>Id</strong>: {0}, <strong>Username</strong>: {1}, <strong>Name</strong>: {2}, <strong>Email</strong>: {3}]]></key>
-
-        <key alias="examineRebuildSuccess">Examine rebuild on startup is disabled.</key>
-        <key alias="examineRebuildError">For sites with lots of content, having Examine rebuild enabled on start can really slow down boot time.</key>
-        <key alias="setExamineConfig">Fix</key>
-        <key alias="setExamineConfigDescription">This will add RebuildOnAppStart="false" to the Examine config file.</key>
-        <key alias="setExamineConfigSuccess">Successfully updated the Examine config file.</key>
-        <key alias="setExamineConfigError">Unable to update the Examine config file.</key>
-    </area>
+  <area alias="Our.Umbraco.HealthChecks">
+    <key alias="adminUserCheckNotFound"><![CDATA[There are no Administrator users with the name or username '<strong>{0}</strong>']]></key>
+    <key alias="adminUserCheckFound"><![CDATA[We found an Administrator user with the name or username '<strong>{0}</strong>']]></key>
+    <key alias="adminUserRename">Please rename these users:</key>
+    <key alias="adminUserUser"><![CDATA[<strong>Id</strong>: {0}, <strong>Username</strong>: {1}, <strong>Name</strong>: {2}, <strong>Email</strong>: {3}]]></key>
+    <key alias="umbracoPathCheckPathChanged">You have changed the umbraco path from the default.</key>
+    <key alias="umbracoPathCheckReservedPathMissing"><![CDATA[Your umbraco path is not in the <strong>umbracoReservedPaths</strong> appSetting value.]]></key>
+    <key alias="umbracoPathCheckConsiderChangingPath">You should consider changing the umbraco path for security reasons.</key>
+    <key alias="umbracoPathCheckInstructions1"><![CDATA[In the appSettings, change the value of <strong>umbracoPath</strong> to something not obvious to hackers, like <strong>my-secret-backoffice-url</strong> (use <strong>-</strong> instead of spaces.)]]></key>
+    <key alias="umbracoPathCheckInstructions2"><![CDATA[Add this to the other appSetting <strong>umbracoReservedPaths</strong>. You can replace <strong>~/umbraco</strong>]]></key>
+    <key alias="umbracoPathCheckInstructions3"><![CDATA[Change the name of the umbraco folder to be the same name.]]></key>
+    <key alias="umbracoPathCheckInstructions4"><![CDATA[Test that everything still works.]]></key>
+    <key alias="umbracoPathCheckWarning"><![CDATA[<strong>BEWARE</strong> This could break some packages which rely on the default umbraco path, so test it first.]]></key>
+    <key alias="loremIpsumCheckSearchTerms">lorem ispum dolor amet</key>
+    <key alias="loremIpsumCheckSuccessNoMatchingContent">There is no content matching these search terms: </key>
+    <key alias="loremIpsumCheckErrorMatchingContentFound">We found some content matching these search terms: </key>
+    <key alias="loremIpsumCheckResultItemText"><![CDATA[<strong>Id</strong>: {0}, <strong>Name</strong>: {1}, <strong>Url</strong>: {2}]]></key>
+    <key alias="examineRebuildSuccess">Examine rebuild on startup is disabled.</key>
+    <key alias="examineRebuildError">For sites with lots of content, having Examine rebuild enabled on start can really slow down boot time.</key>
+    <key alias="setExamineConfig">Fix</key>
+    <key alias="setExamineConfigDescription">This will add RebuildOnAppStart="false" to the Examine config file.</key>
+    <key alias="setExamineConfigSuccess">Successfully updated the Examine config file.</key>
+    <key alias="setExamineConfigError">Unable to update the Examine config file.</key>    
+  </area>
 </language>

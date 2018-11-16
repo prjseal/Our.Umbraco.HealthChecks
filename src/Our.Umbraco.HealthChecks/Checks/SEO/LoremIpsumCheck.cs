@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Configuration;
+using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.SEO
@@ -12,8 +13,11 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
     Group = "SEO")]
     public class LoremIpsumCheck : HealthCheck
     {
+        protected readonly ILocalizedTextService TextService;
+
         public LoremIpsumCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
+            TextService = healthCheckContext.ApplicationContext.Services.TextService;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -29,7 +33,7 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
         private HealthCheckStatus CheckForLoremIpsumContent()
         {
             var queryFromAppSetting = WebConfigurationManager.AppSettings["HealthCheck.SEO.LoremIpsum.SearchTerms"];
-            var query = string.IsNullOrEmpty(queryFromAppSetting) ? "lorem ipsum dolor amet" : queryFromAppSetting;
+            var query = string.IsNullOrEmpty(queryFromAppSetting) ? TextService.Localize("Our.Umbraco.HealthChecks/loremIpsumCheckSearchTerms") : queryFromAppSetting;
 
             var searcher = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
             var results = searcher.Search(query, false);
@@ -38,12 +42,12 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
             StringBuilder message = new StringBuilder();
             if (success)
             {
-                message.Append("There is no content matching these search terms: ");
+                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/loremIpsumCheckSuccessNoMatchingContent"));
                 message.AppendFormat("<strong>{0}</strong>", query);
             }
             else
             {
-                message.Append("We found some content matching these search terms: ");
+                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/loremIpsumCheckErrorMatchingContentFound"));
                 message.AppendFormat("<strong>{0}</strong>", query);
                 message.Append("<br/>");
                 message.Append("<br/>");
@@ -51,7 +55,7 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
                 foreach (var result in results)
                 {
                     message.Append("<li>");
-                    message.AppendFormat("<strong>Id</strong>: {0}, <strong>Name</strong>: {1}, <strong>Url</strong>: {2}", result.Id, result.Fields["nodeName"], result.Fields["urlName"]);
+                    message.AppendFormat(TextService.Localize("Our.Umbraco.HealthChecks/loremIpsumCheckResultItemText"), result.Id, result.Fields["nodeName"], result.Fields["urlName"]);
                     message.Append("</li>");
                 }
                 message.Append("</ul>");

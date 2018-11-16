@@ -9,9 +9,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - fixed namespace
+      - adding text service to lorem ipsum check and umbraco path check
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks</tags>
   </metadata>
+  <files>
+    <file src="App_Plugins\Our.Umbraco.HealthChecks\**\*.*" target="content\App_Plugins\Our.Umbraco.HealthChecks" />
+  </files>  
 </package>

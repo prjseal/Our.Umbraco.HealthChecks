@@ -2,6 +2,9 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/okgo4pkpogij6a8g?svg=true)](https://ci.appveyor.com/project/prjseal/our-umbraco-healthchecks)
 
+
+[![NuGet](https://img.shields.io/nuget/dt/Our.Umbraco.HealthChecks.svg)](https://www.nuget.org/packages/Our.Umbraco.HealthChecks/)
+
 This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
 Please follow the naming of the folders and checks which are in the [Umbraco Core Health Checks](https://github.com/umbraco/Umbraco-CMS/tree/dev-v7/src/Umbraco.Web/HealthCheck/Checks)
@@ -23,6 +26,8 @@ The first check is for checking if there is any Lorem Ipsum Content in the websi
 ## Suggested Checks
 
 If you are looking to contribute a HealthCheck - here are a few suggestions! Feel free to contribute suggestions too.
+
+Go to the [issues page](https://github.com/prjseal/Our.Umbraco.HealthChecks/issues) to suggest checks and see the checks up for grabs
 
 ### Check for TLS 1.2 or later
 
