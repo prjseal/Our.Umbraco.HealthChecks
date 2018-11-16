@@ -69,7 +69,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
             return
                 new HealthCheckStatus(message.ToString())
                 {
-                    ResultType = success ? StatusResultType.Success : StatusResultType.Error,
+                    ResultType = success ? StatusResultType.Success : StatusResultType.Warning,
                     Actions = actions
                 };
         }

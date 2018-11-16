@@ -13,5 +13,9 @@
     <key alias="umbracoPathCheckInstructions3"><![CDATA[Change the name of the umbraco folder to be the same name.]]></key>
     <key alias="umbracoPathCheckInstructions4"><![CDATA[Test that everything still works.]]></key>
     <key alias="umbracoPathCheckWarning"><![CDATA[<strong>BEWARE</strong> This could break some packages which rely on the default umbraco path, so test it first.]]></key>
+    <key alias="loremIpsumCheckSearchTerms">lorem ispum dolor amet</key>
+    <key alias="loremIpsumCheckSuccessNoMatchingContent">There is no content matching these search terms: </key>
+    <key alias="loremIpsumCheckErrorMatchingContentFound">We found some content matching these search terms: </key>
+    <key alias="loremIpsumCheckResultItemText"><![CDATA[<strong>Id</strong>: {0}, <strong>Name</strong>: {1}, <strong>Url</strong>: {2}]]></key>
   </area>
 </language>
