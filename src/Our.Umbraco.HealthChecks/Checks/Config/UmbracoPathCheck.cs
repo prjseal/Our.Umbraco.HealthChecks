@@ -9,7 +9,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
 {
     [HealthCheck("467EFE42-E37D-47FE-A75F-E2D7D2D98438", "Umbraco Path Check",
     Description = "Checks to see if you have changed the umbraco path.",
-    Group = "Config")]
+    Group = "Configuration")]
     public class UmbracoPathCheck : HealthCheck
     {
         public UmbracoPathCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
