@@ -42,6 +42,8 @@ Image processor post processor gives potentially huge savings in terms of image 
 
 ### Check HSTS is enabled
 
+Release 7.11.0 now includes this - U4-9066 - Three new Security Health Checks
+
 ### Check urlCompression is enabled
 
 ### Check HTTP Only and Secure cookies
