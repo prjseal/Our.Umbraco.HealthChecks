@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Configuration;
+using Umbraco.Web.HealthCheck;
 
-namespace Umbraco.Web.HealthCheck.Checks.SEO
+namespace Our.Umbraco.HealthChecks.Checks.SEO
 {
     [HealthCheck("ADB911FE-9322-4711-AD2E-42E1FB7BC577", "Lorem Ipsum Check",
     Description = "Checks to see if you have any Lorem Ipsum content in your site.",

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Umbraco.Core;
+using Umbraco.Web.HealthCheck;
 
-namespace Umbraco.Web.HealthCheck.Checks.Security
+namespace Our.Umbraco.HealthChecks.Checks.Security
 {
     [HealthCheck("42a3a15f-c2f0-48e7-ae5a-1237c5af5e35", "Admin User Check",
     Description = "Check the admin user isn't called 'admin'",
