@@ -7,13 +7,14 @@
     <authors>Paul Seal</authors>
     <owners>Paul Seal</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
     <releaseNotes>
-      - text service usage and app_plugins included
+      - fixed namespace
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks</tags>
   </metadata>
   <files>
     <file src="App_Plugins\Our.Umbraco.HealthChecks\**\*.*" target="content\App_Plugins\Our.Umbraco.HealthChecks" />
-  </files>
+  </files>  
 </package>
