@@ -33,7 +33,7 @@ namespace Umbraco.Web.HealthCheck.Checks.Security
             var userService = ApplicationContext.Current.Services.UserService;
             int totalRecords = 0;
             var users = userService.GetAll(0, int.MaxValue, out totalRecords).Where(x => x.UserType.Alias.InvariantEquals(userType));
-            var matchingUsers = users.Where(u => u.Name.InvariantEquals(userType) || u.Username.Equals(userType)).ToList();
+            var matchingUsers = users.Where(u => u.Name.InvariantEquals(userType) || u.Username.InvariantEquals(userType)).ToList();
             var success = !matchingUsers.Any();
             if (success)
             {
