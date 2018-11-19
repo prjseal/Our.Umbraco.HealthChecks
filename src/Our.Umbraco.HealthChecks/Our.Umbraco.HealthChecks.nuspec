@@ -6,13 +6,15 @@
     <title>$title$</title>
     <authors>Paul Seal</authors>
     <owners>Paul Seal</owners>
+    <licenseUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - adding text service to lorem ipsum check and umbraco path check
+      - added TLS 1.2 check
     </releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Our.Umbraco.HealthChecks</tags>
+    <tags>Our.Umbraco.HealthChecks Umbraco Health Checks Our CMS Contrib</tags>
   </metadata>
   <files>
     <file src="App_Plugins\Our.Umbraco.HealthChecks\**\*.*" target="content\App_Plugins\Our.Umbraco.HealthChecks" />

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
@@ -25,7 +25,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Security
 
         public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
         {
-            throw new System.NotImplementedException();
+            throw new InvalidOperationException("TlsCheck has no executable actions");
         }
 
         public HealthCheckStatus CheckTls()
