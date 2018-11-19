@@ -33,10 +33,16 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
             get { return ValueComparisonType.ShouldEqual; }
         }
 
-        public override IEnumerable<AcceptableConfiguration> Values => new List<AcceptableConfiguration>
+        public override IEnumerable<AcceptableConfiguration> Values
         {
-            new AcceptableConfiguration { IsRecommended = true, Value = "Single" }
-        };
+            get
+            {
+                return new List<AcceptableConfiguration>
+                {
+                    new AcceptableConfiguration { IsRecommended = true, Value = "Single" }
+                };
+            }
+        } 
 
         public override string CheckSuccessMessage
         {

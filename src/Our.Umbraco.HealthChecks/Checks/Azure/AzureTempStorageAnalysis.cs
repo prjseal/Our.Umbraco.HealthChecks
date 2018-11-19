@@ -49,7 +49,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
             var isCorrectValue = string.Equals(tempStorageSetting, matchingValue, StringComparison.InvariantCultureIgnoreCase);
 
             return
-                new HealthCheckStatus(isCorrectValue ? "Success" : $"{appSetting} should be set to '{matchingValue}', but is currently set to '{tempStorageSetting}'")
+                new HealthCheckStatus(isCorrectValue ? "Success" : $"{appSetting} should be set to '{matchingValue}', but is " + (!string.IsNullOrWhiteSpace(tempStorageSetting) ? $"currently set to '{tempStorageSetting}'" : "missing from the app settings"))
                 {
                     ResultType = isCorrectValue ? StatusResultType.Success : StatusResultType.Error,
                     Actions = new List<HealthCheckAction>()

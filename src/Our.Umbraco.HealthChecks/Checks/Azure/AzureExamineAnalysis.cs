@@ -38,13 +38,19 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
             get { return ValueComparisonType.ShouldEqual; }
         }
 
-        public override IEnumerable<AcceptableConfiguration> Values => new List<AcceptableConfiguration>
+        public override IEnumerable<AcceptableConfiguration> Values
         {
-            new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.TempEnvDirectoryFactory,Examine" },
-            new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.TempEnvDirectoryFactory, Examine" },
-            new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.SyncTempEnvDirectoryFactory,Examine" },
-            new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.SyncTempEnvDirectoryFactory, Examine" }
-        };
+            get
+            {
+                return new List<AcceptableConfiguration>
+                {
+                    new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.TempEnvDirectoryFactory,Examine" },
+                    new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.TempEnvDirectoryFactory, Examine" },
+                    new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.SyncTempEnvDirectoryFactory,Examine" },
+                    new AcceptableConfiguration { IsRecommended = true, Value = "Examine.LuceneEngine.Directories.SyncTempEnvDirectoryFactory, Examine" }
+                };
+            }
+        } 
 
         public override string CheckSuccessMessage
         {
