@@ -22,6 +22,8 @@
     <key alias="setExamineConfig">Fix</key>
     <key alias="setExamineConfigDescription">This will add RebuildOnAppStart="false" to the Examine config file.</key>
     <key alias="setExamineConfigSuccess">Successfully updated the Examine config file.</key>
-    <key alias="setExamineConfigError">Unable to update the Examine config file.</key>    
+    <key alias="setExamineConfigError">Unable to update the Examine config file.</key>
+    <key alias="tlsCheckError">Outgoing connections from your website are being served over an old protocol. You should consider updating it to use TLS 1.2 or higher.</key>
+    <key alias="tlsCheckSuccess">Your website is set up to use TLS 1.2 for outgoing connections.</key>
   </area>
 </language>
