@@ -11,9 +11,9 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
     [HealthCheck("D0E1A87E-5EC4-426D-8E2B-C76AE7350439", "Azure Logging Check",
         Description = "Checks that logging patterns are appropriate for the Azure platform.",
         Group = "Azure")]
-    public class AzureLoggingAnalysis : AbstractConfigCheck
+    public class AzureLoggingCheck : AbstractConfigCheck
     {
-        public AzureLoggingAnalysis(HealthCheckContext healthCheckContext) : base(healthCheckContext)
+        public AzureLoggingCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
 
         }

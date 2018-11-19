@@ -11,9 +11,9 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
     [HealthCheck("35631050-103B-45A9-AE24-EDF2E1E82DA6", "Azure Examine Compatibility Check",
         Description = "Checks that examine settings are appropriate for the Azure platform.",
         Group = "Azure")]
-    public class AzureExamineAnalysis : AbstractConfigCheck
+    public class AzureExamineCheck : AbstractConfigCheck
     {
-        public AzureExamineAnalysis(HealthCheckContext healthCheckContext) : base(healthCheckContext)
+        public AzureExamineCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
 
         }

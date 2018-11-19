@@ -12,10 +12,10 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
     [HealthCheck("F9088377-103A-4712-B428-D4AB6E5B2A67", "Azure Temp Storage Config Check",
     Description = "Checks that temp storage config is appropriate for the Azure platform.",
     Group = "Azure")]
-    public class AzureTempStorageAnalysis : HealthCheck
+    public class AzureTempStorageCheck : HealthCheck
     {
 
-        public AzureTempStorageAnalysis(HealthCheckContext healthCheckContext) : base(healthCheckContext)
+        public AzureTempStorageCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
         }
 
