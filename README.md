@@ -16,39 +16,50 @@ You can login to the website and test the health checks. Here are the login deta
 <strong>username:</strong> admin@admin.com<br/>
 <strong>password:</strong> 1234567890
 
-## Lorem Ipsum Check
+## Current Checks
 
-The first check is for checking if there is any Lorem Ipsum Content in the website. It goes under the SEO category. It doesn't have any actions to fix it, it just alerts you to it so you can check on your site.
+### Azure
 
-![](/images/loremipsumcheck.png)
+#### Azure Examine Compatibility Check
 
+Checks that examine settings are appropriate for the Azure platform.
 
-## Suggested Checks
+#### Azure File Change Notification Config Check
 
-If you are looking to contribute a HealthCheck - here are a few suggestions! Feel free to contribute suggestions too.
+Checks that fcnMode config is appropriate for the Azure platform.
 
-Go to the [issues page](https://github.com/prjseal/Our.Umbraco.HealthChecks/issues) to suggest checks and see the checks up for grabs
+#### Azure Logging Check
 
-### Check for TLS 1.2 or later
+Checks that logging patterns are appropriate for the Azure platform.
 
-### Check whether examine rebuild on start is off
+#### Azure Temp Storage Config Check
 
-For sites with lots of content, having Examine rebuild enabled on start can really slow down boot time.
+Checks that temp storage config is appropriate for the Azure platform.
 
-### Check for an XML Sitemap
+### Config
 
-### FCN Mode 
+#### Examine Rebuild On Startup
 
-Check that FCN Mode is set to Single or disabled
+Check whether examine rebuild on start is off
 
-### Check Image Processor Post processor is installed
+#### Umbraco Path Check
 
-Image processor post processor gives potentially huge savings in terms of image download size - by just installing the nuget package.
+Checks to see if you have changed the umbraco path.
 
-### Check HSTS is enabled
+### Security
 
-Release 7.11.0 now includes this - U4-9066 - Three new Security Health Checks
+#### Admin User Check
 
-### Check urlCompression is enabled
+Check the admin user isn't called 'admin'
 
-### Check HTTP Only and Secure cookies
+#### TLS Check
+
+Check the TLS protocol being used
+
+## Suggest Checks
+
+If you would like to suggest checks please raise it as an issue.
+
+## Contribute Checks
+
+If you would like to contribute any checks, please either choose one from the existing issues list, or create an issue first and link to it in the PR using a hashtag and the issue number i.e. #1234
