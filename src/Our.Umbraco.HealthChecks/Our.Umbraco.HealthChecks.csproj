@@ -204,6 +204,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checks\Azure\AzureExamineCheck.cs" />
+    <Compile Include="Checks\Azure\AzureFcnModeCheck.cs" />
+    <Compile Include="Checks\Azure\AzureLoggingCheck.cs" />
+    <Compile Include="Checks\Azure\AzureTempStorageCheck.cs" />
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\Security\TlsCheck.cs" />
