@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Umbraco.Core;
@@ -18,7 +20,6 @@ namespace Our.Umbraco.HealthChecks.Checks.Services
     {
         protected readonly ILocalizedTextService TextService;
         private const string SetExamineConfigAction = "setExamineConfig";
-        private ConfigurationService _configurationService;
         private const string FilePath = "~/config/examineSettings.config";
         private const string XPath = "/Examine/@RebuildOnAppStart";
         private const string Attribute = "RebuildOnAppStart";
@@ -50,11 +51,11 @@ namespace Our.Umbraco.HealthChecks.Checks.Services
             var success = false;
 
             var absoluteFilePath = IOHelper.MapPath(FilePath);
-            
-            _configurationService = new ConfigurationService(absoluteFilePath, XPath);
-            var configValue = _configurationService.GetConfigurationValue();
-            
-            if (configValue.Success && configValue.Result.InvariantEquals("false"))
+            var xmlDocument = new XmlDocument { PreserveWhitespace = true };
+            xmlDocument.Load(absoluteFilePath);
+
+            var xmlNode = xmlDocument.SelectSingleNode(XPath);
+            if (xmlNode != null && xmlNode.InnerText.InvariantEquals("false"))
             {
                 success = true;
                 message.Append(TextService.Localize("Our.Umbraco.HealthChecks/examineRebuildSuccess"));
@@ -107,28 +108,28 @@ namespace Our.Umbraco.HealthChecks.Checks.Services
         {
             try
             {
-                // There don't look to be any useful classes defined in https://msdn.microsoft.com/en-us/library/system.web.configuration(v=vs.110).aspx
-                // for working with the customHeaders section, so working with the XML directly.
                 var absoluteFilePath = IOHelper.MapPath(FilePath);
-                _configurationService = new ConfigurationService(absoluteFilePath, XPath);
-                
-                var configFile = IOHelper.MapPath(FilePath);
-                var doc = XDocument.Load(configFile);
-                var examineElement = doc.XPathSelectElement("/Examine");
-
-                if (examineElement != null && examineElement.Attribute(Attribute) != null)
+                if (File.Exists(absoluteFilePath))
                 {
-                    examineElement.Attribute(Attribute).Value = "false";
-                }
-                else if (examineElement != null && examineElement.Attribute(Attribute) == null)
-                {
-                    examineElement.Add(new XAttribute(Attribute, "false"));
-                }
-                
-                doc.Save(configFile);
+                    var doc = XDocument.Load(absoluteFilePath, LoadOptions.PreserveWhitespace);
+                    var examineElement = doc.XPathSelectElement("/Examine");
 
-                errorMessage = string.Empty;
-                return true;
+                    if (examineElement != null && examineElement.Attribute(Attribute) != null)
+                    {
+                        examineElement.Attribute(Attribute).Value = "false";
+                    }
+                    else if (examineElement != null && examineElement.Attribute(Attribute) == null)
+                    {
+                        examineElement.Add(new XAttribute(Attribute, "false"));
+                    }
+
+                    doc.Save(absoluteFilePath, SaveOptions.DisableFormatting);
+
+                    errorMessage = string.Empty;
+                    return true;
+                }
+                errorMessage = string.Format("File not found at {0}", FilePath);
+                return false;
             }
             catch (Exception ex)
             {
