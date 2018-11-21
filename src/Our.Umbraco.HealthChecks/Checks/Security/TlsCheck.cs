@@ -7,7 +7,7 @@ using Umbraco.Web.HealthCheck;
 namespace Our.Umbraco.HealthChecks.Checks.Security
 {
     [HealthCheck("92AE66E1-209D-4F9E-AAF5-19B19D41CF49", "TLS Check",
-        Description = "Check the TLS protocol being used",
+        Description = "Check if TLS 1.2 or greater is being used",
         Group = "Security")]
     public class TlsCheck : HealthCheck
     {

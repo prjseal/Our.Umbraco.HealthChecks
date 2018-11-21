@@ -222,9 +222,7 @@
   <ItemGroup>
     <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-GB.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Checks\Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <PropertyGroup>

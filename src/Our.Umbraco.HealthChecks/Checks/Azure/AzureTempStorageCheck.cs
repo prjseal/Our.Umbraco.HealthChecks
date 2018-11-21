@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Configuration;
-using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure

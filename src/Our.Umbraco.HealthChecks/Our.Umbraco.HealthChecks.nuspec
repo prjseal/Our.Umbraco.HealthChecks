@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - added Health Checks in-line with Umbraco-Azure setup recommendations
+      - fixed issue with configurations service.
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks Umbraco Health Checks Our CMS Contrib</tags>
