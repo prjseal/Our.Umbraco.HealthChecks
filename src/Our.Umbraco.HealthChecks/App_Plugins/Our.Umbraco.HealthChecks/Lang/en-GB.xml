@@ -25,5 +25,11 @@
     <key alias="setExamineConfigError">Unable to update the Examine config file.</key>
     <key alias="tlsCheckError">Outgoing connections from your website are being served over an old protocol. You should consider updating it to use TLS 1.2 or higher.</key>
     <key alias="tlsCheckSuccess">Your website is set up to use TLS 1.2 for outgoing connections.</key>
+    <key alias="hstsSuccess">HSTS is enabled</key>
+    <key alias="hstsError">The HSTS Policy helps protect web application users against some passive (eavesdropping) and active network attacks. A man-in-the-middle attacker has a greatly reduced ability to intercept requests and responses between a user and a web application server while the user's browser has HSTS Policy in effect for that web application.</key>
+    <key alias="setHstsConfig">Fix</key>
+    <key alias="setHstsConfigDescription">This will add the HSTS settings to the web.config file.</key>
+    <key alias="setHstsConfigSuccess">Successfully added HSTS settings to the web.config file.</key>
+    <key alias="setHstsConfigError">Unable to update the web.config file.</key>
   </area>
 </language>
