@@ -18,7 +18,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
         protected readonly ILocalizedTextService TextService;
         private const string SetHstsConfigAction = "setHstsConfig";
         private const string FilePath = "~/web.config";
-        private const string XPath = "/configuration/system.webServer/rewrite/outboundRules/rule/match[@serverVariable='RESPONSE_Strict_Transport_Security']";
+        private const string XPath = "/configuration/system.webServer/httpProtocol/customHeaders/add[@name='Strict-Transport-Security']";
         private const string Attribute = "enabled";
 
         public HstsCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
@@ -119,39 +119,28 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
                         //Element set up as per Scott Hanselman's blog post.
                         //https://www.hanselman.com/blog/HowToEnableHTTPStrictTransportSecurityHSTSInIIS7.aspx#highlighter_5478
 
-                        XElement hstsRuleElement = new XElement("rule",
-                            new XAttribute("name", "Add Strict-Transport-Security when HTTPS"),
-                            new XAttribute("enabled", "true"),
-                            new XElement("match",
-                                new XAttribute("serverVariable", "RESPONSE_Strict_Transport_Security"),
-                                new XAttribute("pattern", ".*")),
-                            new XElement("conditions",
-                                new XElement("add",
-                                    new XAttribute("input", "{HTTPS}"),
-                                    new XAttribute("pattern", "on"),
-                                    new XAttribute("ignoreCase", "true"))),
-                            new XElement("action",
-                                new XAttribute("type", "Rewrite"),
-                                new XAttribute("value", "max-age=31536000; preload")));
+                        XElement hstsHeaderElement = new XElement("add",
+                            new XAttribute("name", "Strict-Transport-Security"),
+                            new XAttribute("value", "max-age=31536000;"));
 
-                        var rewriteElement = doc.XPathSelectElement("/configuration/system.webServer/rewrite");
+                        var httpProtocolElement = doc.XPathSelectElement("/configuration/system.webServer/httpProtocol");
 
-                        if(rewriteElement != null)
+                        if(httpProtocolElement != null)
                         {
-                            var outboundRulesElement = doc.XPathSelectElement("/configuration/system.webServer/rewrite/outboundRules");
+                            var customHeadersElement = doc.XPathSelectElement("/configuration/system.webServer/httpProtocol/customHeaders");
 
-                            if(outboundRulesElement != null)
+                            if(customHeadersElement != null)
                             {
-                                outboundRulesElement.Add(hstsRuleElement);
+                                customHeadersElement.Add(hstsHeaderElement);
                             }
                             else
                             {
-                                rewriteElement.Add(new XElement("outboundRules", hstsRuleElement));
+                                httpProtocolElement.Add(new XElement("customHeaders", hstsHeaderElement));
                             }
                         }
                         else
                         {
-                            systemWebServerElement.Add(new XElement("rewrite", new XElement("outboundRules", hstsRuleElement)));
+                            systemWebServerElement.Add(new XElement("httpProtocol", new XElement("customHeaders", hstsHeaderElement)));
                         }
                     }
 
