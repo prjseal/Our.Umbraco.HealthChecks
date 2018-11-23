@@ -221,6 +221,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-US.xml" />
     <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-GB.xml" />
   </ItemGroup>
   <ItemGroup />
