@@ -8,7 +8,7 @@ using Umbraco.Core.IO;
 using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
-namespace Our.Umbraco.HealthChecks.Checks.Config
+namespace Our.Umbraco.HealthChecks.Checks.Security
 {
     [HealthCheck("6437384C-D1D3-46DA-9E21-9E0BC1498E1F", "HSTS Check (from Our.Umbraco.HealthChecks)",
     Description = "Check to see if the HSTS policy is set on the website.",
@@ -28,7 +28,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
         {
-            return new[] { CheckHSTS() };
+            return new[] { CheckHsts() };
         }
 
         public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
@@ -42,7 +42,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
             }
         }
 
-        private HealthCheckStatus CheckHSTS()
+        private HealthCheckStatus CheckHsts()
         {
             StringBuilder message = new StringBuilder();
             var success = false;

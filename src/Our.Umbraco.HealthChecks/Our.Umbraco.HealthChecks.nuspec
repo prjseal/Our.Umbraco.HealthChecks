@@ -8,10 +8,11 @@
     <owners>Paul Seal</owners>
     <licenseUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/</projectUrl>
+    <iconUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/images/health-check.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - added HSTS check for sites running Umbraco older than v7.11
+      - added PostProcessor check
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks Umbraco Health Checks Our CMS Contrib HealthChecks lib library</tags>

@@ -31,5 +31,7 @@
     <key alias="setHstsConfigDescription">This will add the HSTS header to the web.config file.</key>
     <key alias="setHstsConfigSuccess">Successfully added HSTS settings to the web.config file.</key>
     <key alias="setHstsConfigError">Unable to update the web.config file.</key>
+    <key alias="postProcessorSuccess">ImageProcessor.Web.PostProcessor is installed.</key>
+    <key alias="postProcessorError">If you install the NuGet package ImageProcessor.Web.PostProcessor, it will add optimisations that can reduce images by up to 60% in certain circumstances, just by having the package installed.</key>
   </area>
 </language>
