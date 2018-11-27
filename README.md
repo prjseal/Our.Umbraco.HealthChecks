@@ -1,5 +1,7 @@
 # Our.Umbraco.HealthChecks
 
+![Our.Umbraco.HealthChecks](/images/health-check.png)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/okgo4pkpogij6a8g?svg=true)](https://ci.appveyor.com/project/prjseal/our-umbraco-healthchecks)
 
 
