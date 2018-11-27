@@ -48,6 +48,10 @@ Check whether examine rebuild on start is off
 
 Checks to see if you have changed the umbraco path.
 
+### PostProcessor Check
+
+Checks if ImageProcessor.Web.PostProcessor is installed.
+
 ### Security
 
 #### Admin User Check
