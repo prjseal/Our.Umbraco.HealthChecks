@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Web;
 using System.Xml;
 using Umbraco.Core.IO;
 using Umbraco.Core.Services;
@@ -14,12 +16,14 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
     public class PostProcessorCheck : HealthCheck
     {
         protected readonly ILocalizedTextService TextService;
+        protected readonly HttpServerUtilityBase Server;
         private const string FilePath = "~/packages.config";
         private const string XPath = "//packages/package[@id='ImageProcessor.Web.PostProcessor']";
 
         public PostProcessorCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             TextService = healthCheckContext.ApplicationContext.Services.TextService;
+            Server = healthCheckContext.HttpContext.Server;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -37,17 +41,23 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
             StringBuilder message = new StringBuilder();
             var success = false;
 
-            var absoluteFilePath = IOHelper.MapPath(FilePath);
-            var xmlDocument = new XmlDocument { PreserveWhitespace = true };
-            xmlDocument.Load(absoluteFilePath);
 
-            var xmlNode = xmlDocument.SelectSingleNode(XPath);
-            if (xmlNode != null)
+
+
+            if(File.Exists(Server.MapPath(FilePath)))
             {
-                success = true;
-                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/postProcessorSuccess"));
+                var absoluteFilePath = IOHelper.MapPath(FilePath);
+                var xmlDocument = new XmlDocument { PreserveWhitespace = true };
+                xmlDocument.Load(absoluteFilePath);
+                var xmlNode = xmlDocument.SelectSingleNode(XPath);
+                if (xmlNode != null)
+                {
+                    success = true;
+                    message.Append(TextService.Localize("Our.Umbraco.HealthChecks/postProcessorSuccess"));
+                }
             }
-            else
+
+            if(!success)
             {
                 message.Append(TextService.Localize("Our.Umbraco.HealthChecks/postProcessorError"));
             }
@@ -57,7 +67,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
             return
                 new HealthCheckStatus(message.ToString())
                 {
-                    ResultType = success ? StatusResultType.Success : StatusResultType.Error,
+                    ResultType = success ? StatusResultType.Success : StatusResultType.Warning,
                     Actions = actions
                 };
         }

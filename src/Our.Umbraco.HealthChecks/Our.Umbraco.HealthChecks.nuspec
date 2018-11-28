@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      - added PostProcessor check
+      - check if packages.config file exists before looking for PostProcessor package
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Our.Umbraco.HealthChecks Umbraco Health Checks Our CMS Contrib HealthChecks lib library</tags>
