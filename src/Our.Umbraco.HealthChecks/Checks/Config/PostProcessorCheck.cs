@@ -16,14 +16,12 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
     public class PostProcessorCheck : HealthCheck
     {
         protected readonly ILocalizedTextService TextService;
-        protected readonly HttpServerUtilityBase Server;
         private const string FilePath = "~/packages.config";
         private const string XPath = "//packages/package[@id='ImageProcessor.Web.PostProcessor']";
 
         public PostProcessorCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             TextService = healthCheckContext.ApplicationContext.Services.TextService;
-            Server = healthCheckContext.HttpContext.Server;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -40,13 +38,10 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
         {
             StringBuilder message = new StringBuilder();
             var success = false;
+            var absoluteFilePath = IOHelper.MapPath(FilePath);
 
-
-
-
-            if(File.Exists(Server.MapPath(FilePath)))
+            if (File.Exists(absoluteFilePath))
             {
-                var absoluteFilePath = IOHelper.MapPath(FilePath);
                 var xmlDocument = new XmlDocument { PreserveWhitespace = true };
                 xmlDocument.Load(absoluteFilePath);
                 var xmlNode = xmlDocument.SelectSingleNode(XPath);
