@@ -208,6 +208,8 @@
     <Compile Include="Checks\Azure\AzureFcnModeCheck.cs" />
     <Compile Include="Checks\Azure\AzureLoggingCheck.cs" />
     <Compile Include="Checks\Azure\AzureTempStorageCheck.cs" />
+    <Compile Include="Checks\Config\PostProcessorCheck.cs" />
+    <Compile Include="Checks\Security\HstsCheck.cs" />
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\Security\TlsCheck.cs" />
@@ -220,6 +222,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-US.xml" />
     <Content Include="App_Plugins\Our.Umbraco.HealthChecks\Lang\en-GB.xml" />
   </ItemGroup>
   <ItemGroup />

@@ -1,5 +1,7 @@
 # Our.Umbraco.HealthChecks
 
+![Our.Umbraco.HealthChecks](/images/health-check.png)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/okgo4pkpogij6a8g?svg=true)](https://ci.appveyor.com/project/prjseal/our-umbraco-healthchecks)
 
 
@@ -45,6 +47,10 @@ Check whether examine rebuild on start is off
 #### Umbraco Path Check
 
 Checks to see if you have changed the umbraco path.
+
+### PostProcessor Check
+
+Checks if ImageProcessor.Web.PostProcessor is installed.
 
 ### Security
 
