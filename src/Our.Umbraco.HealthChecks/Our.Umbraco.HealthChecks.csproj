@@ -213,6 +213,7 @@
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\Security\TlsCheck.cs" />
+    <Compile Include="Checks\SEO\XmlSitemapCheck.cs" />
     <Compile Include="Checks\SEO\LoremIpsumCheck.cs" />
     <Compile Include="Checks\Config\ExamineRebuildOnStartCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

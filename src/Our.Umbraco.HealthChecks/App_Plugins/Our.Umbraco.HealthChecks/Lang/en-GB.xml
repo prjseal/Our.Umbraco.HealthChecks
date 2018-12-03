@@ -33,5 +33,14 @@
     <key alias="setHstsConfigError">Unable to update the web.config file.</key>
     <key alias="postProcessorSuccess">ImageProcessor.Web.PostProcessor is installed.</key>
     <key alias="postProcessorError">If you install the NuGet package ImageProcessor.Web.PostProcessor, it will add optimisations that can reduce images by up to 60% in certain circumstances, just by having the package installed.</key>
+    <key alias="sitemapDefaultMessage">default sitemap at /sitemap.xml</key>
+    <key alias="sitemapDefaultMessageRobots">robots.txt sitemap at</key>
+    <key alias="sitemapFound">was found.</key>
+    <key alias="sitemapNotFound">was not found.</key>
+    <key alias="sitemapError">Error reading the</key>
+    <key alias="robotsError">Error reading the robots.txt file.</key>
+    <key alias="robotsNotFound">The robots.txt file was not found.</key>
+    <key alias="robotsEmpty">robots.txt file is empty.</key>
+    <key alias="robotsContainsNoSitemaps">robots.txt does not contain any sitemaps.</key>
   </area>
 </language>
