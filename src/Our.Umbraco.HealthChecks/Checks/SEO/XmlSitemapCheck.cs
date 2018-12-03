@@ -23,8 +23,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
         protected bool CheckSitemapUrlStatus;
         protected int RobotSitemaps;
         protected int RobotSitemapsChecked;
-        protected bool RobotContainsNoSitemaps;
-
+        
         public XmlSitemapCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             TextService = healthCheckContext.ApplicationContext.Services.TextService;
@@ -69,15 +68,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
 
             var actions = new List<HealthCheckAction>();
 
-            var success = false;
-            if (RobotContainsNoSitemaps)
-            {
-                success = true;
-            }
-            else
-            {
-                success = RobotSitemaps == RobotSitemapsChecked;
-            }
+            var success = RobotSitemaps == RobotSitemapsChecked;
 
             return
                 new HealthCheckStatus(message.ToString())
@@ -155,7 +146,6 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
                             }
                             else
                             {
-                                RobotContainsNoSitemaps = true;
                                 message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsContainsNoSitemaps"));
                                 message.Append("<br/>");
                             }
