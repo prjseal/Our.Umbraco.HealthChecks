@@ -5,7 +5,7 @@ using Umbraco.Web.HealthCheck.Checks.Config;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure
 {
-    [HealthCheck("EA9619FE-1DF4-4399-A4E5-32F2CF0CDC1F", "Azure File Change Notification Config Check",
+    [HealthCheck("EA9619FE-1DF4-4399-A4E5-32F2CF0CDC1F", "Azure File Change Notification Config Check - (from Our.Umbraco.HealthChecks)",
         Description = "Checks that fcnMode config is appropriate for the Azure platform.",
         Group = "Azure")]
     public class AzureFcnModeCheck : AbstractConfigCheck

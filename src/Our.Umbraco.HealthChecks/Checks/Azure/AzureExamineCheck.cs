@@ -5,7 +5,7 @@ using Umbraco.Web.HealthCheck.Checks.Config;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure
 {
-    [HealthCheck("35631050-103B-45A9-AE24-EDF2E1E82DA6", "Azure Examine Compatibility Check",
+    [HealthCheck("35631050-103B-45A9-AE24-EDF2E1E82DA6", "Azure Examine Compatibility Check - (from Our.Umbraco.HealthChecks)",
         Description = "Checks that examine settings are appropriate for the Azure platform.",
         Group = "Azure")]
     public class AzureExamineCheck : AbstractConfigCheck

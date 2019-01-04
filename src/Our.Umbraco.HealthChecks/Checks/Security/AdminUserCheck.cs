@@ -8,7 +8,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Security
 {
-    [HealthCheck("42a3a15f-c2f0-48e7-ae5a-1237c5af5e35", "Admin User Check",
+    [HealthCheck("42a3a15f-c2f0-48e7-ae5a-1237c5af5e35", "Admin User Check - (from Our.Umbraco.HealthChecks)",
     Description = "Check the admin user isn't called 'admin'",
     Group = "Security")]
     public class AdminUserCheck : HealthCheck

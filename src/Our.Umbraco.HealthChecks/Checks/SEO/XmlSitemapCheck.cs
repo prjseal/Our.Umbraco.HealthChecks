@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,9 +10,9 @@ using Umbraco.Core;
 using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
-namespace Our.Umbraco.HealthChecks.Checks.Config
+namespace Our.Umbraco.HealthChecks.Checks.SEO
 {
-    [HealthCheck("4e5064b2-e0d1-4945-9a26-f42026080902", "XML Sitemap",
+    [HealthCheck("4e5064b2-e0d1-4945-9a26-f42026080902", "XML Sitemap - (from Our.Umbraco.HealthChecks)",
     Description = "Look for a sitemap at the address /sitemap.xml or look in the robots.txt file for any sitemaps and check that those exist",
     Group = "SEO")]
     public class XmlSitemapCheck : HealthCheck
