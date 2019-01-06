@@ -8,7 +8,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Config
 {
-    [HealthCheck("467EFE42-E37D-47FE-A75F-E2D7D2D98438", "Umbraco Path Check",
+    [HealthCheck("467EFE42-E37D-47FE-A75F-E2D7D2D98438", "Umbraco Path Check - (from Our.Umbraco.HealthChecks)",
     Description = "Checks to see if you have changed the umbraco path.",
     Group = "Configuration")]
     public class UmbracoPathCheck : HealthCheck

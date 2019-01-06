@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Web;
 using System.Xml;
 using Umbraco.Core.IO;
 using Umbraco.Core.Services;
@@ -10,7 +9,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Config
 {
-    [HealthCheck("CA765D50-85D9-4346-BBC4-8DEEBB7EBAE2", "PostProcessor Check",
+    [HealthCheck("CA765D50-85D9-4346-BBC4-8DEEBB7EBAE2", "PostProcessor Check - (from Our.Umbraco.HealthChecks)",
     Description = "Check if ImageProcessor.Web.PostProcessor is installed",
     Group = "Configuration")]
     public class PostProcessorCheck : HealthCheck

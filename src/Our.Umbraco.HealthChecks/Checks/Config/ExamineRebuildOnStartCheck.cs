@@ -12,7 +12,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Config
 {
-    [HealthCheck("4e5064b2-e0d1-4945-9a26-f42026080701", "Examine Rebuild On Startup",
+    [HealthCheck("4e5064b2-e0d1-4945-9a26-f42026080701", "Examine Rebuild On Startup - (from Our.Umbraco.HealthChecks)",
     Description = "Check whether examine rebuild on start is off",
     Group = "Configuration")]
     public class ExamineRebuildOnStartupCheck : HealthCheck

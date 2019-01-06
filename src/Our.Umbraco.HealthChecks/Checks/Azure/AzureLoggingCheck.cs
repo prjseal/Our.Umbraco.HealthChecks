@@ -5,7 +5,7 @@ using Umbraco.Web.HealthCheck.Checks.Config;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure
 {
-    [HealthCheck("D0E1A87E-5EC4-426D-8E2B-C76AE7350439", "Azure Logging Check",
+    [HealthCheck("D0E1A87E-5EC4-426D-8E2B-C76AE7350439", "Azure Logging Check - (from Our.Umbraco.HealthChecks)",
         Description = "Checks that logging patterns are appropriate for the Azure platform.",
         Group = "Azure")]
     public class AzureLoggingCheck : AbstractConfigCheck

@@ -10,7 +10,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Security
 {
-    [HealthCheck("6437384C-D1D3-46DA-9E21-9E0BC1498E1F", "HSTS Check (from Our.Umbraco.HealthChecks)",
+    [HealthCheck("6437384C-D1D3-46DA-9E21-9E0BC1498E1F", "HSTS Check - (from Our.Umbraco.HealthChecks)",
     Description = "Check to see if the HSTS policy is set on the website.",
     Group = "Security")]
     public class HstsCheck : HealthCheck

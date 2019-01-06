@@ -8,7 +8,7 @@ using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.SEO
 {
-    [HealthCheck("ADB911FE-9322-4711-AD2E-42E1FB7BC577", "Lorem Ipsum Check",
+    [HealthCheck("ADB911FE-9322-4711-AD2E-42E1FB7BC577", "Lorem Ipsum Check - (from Our.Umbraco.HealthChecks)",
     Description = "Checks to see if you have any Lorem Ipsum content in your site.",
     Group = "SEO")]
     public class LoremIpsumCheck : HealthCheck
