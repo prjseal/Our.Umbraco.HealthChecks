@@ -37,21 +37,20 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
                 return new List<AcceptableConfiguration>
                 {
                     new AcceptableConfiguration {IsRecommended = true, Value = "Error"},
-                    new AcceptableConfiguration {IsRecommended = false, Value = "Warn"},
+                    new AcceptableConfiguration {IsRecommended = true, Value = "Warn"},
                 };
             }
         }
-
-
-
+        
         public override string CheckSuccessMessage
         {
             get
             {
-                var isRecommended = CurrentValue == Values.First(v => v.IsRecommended).Value;
+                bool isRecommended = AcceptableValues().Select(x => x.ToLower()).Contains(CurrentValue.ToLower());
+                                                            
                 return isRecommended
                     ? $"Log4Net priority is set to '{CurrentValue}'"
-                    : $"Log4Net priority is set to '{CurrentValue}', consider setting it to '{Values.First(v => v.IsRecommended).Value}' for optimum performance";
+                    : $"Log4Net priority is set to '{CurrentValue}', consider setting it to one of '{AccpetableValuesMessage()}' for optimum performance";
             }
         }
 
@@ -61,13 +60,23 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
             get
             {
                 return
-                    $"Log4Net priority should be set to '{Values.First(v => v.IsRecommended).Value}', but is currently set to '{CurrentValue}'";
+                    $"Log4Net priority should be set to one of '{AccpetableValuesMessage()}', but is currently set to '{CurrentValue}'";
             }
         }
 
         public override string RectifySuccessMessage
         {
             get { return $"Log4Net priority set to '{Values.First(v => v.IsRecommended).Value}'"; }
+        }
+
+        private IEnumerable<string> AcceptableValues()
+        {
+            return Values.Where(x => x.IsRecommended).Select(x => x.Value);
+        }
+
+        private string AccpetableValuesMessage()
+        {
+            return string.Join(", ", AcceptableValues());
         }
     }
 }
