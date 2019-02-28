@@ -4,7 +4,7 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Paul Seal, Ian Houghton, Laura Weatherhead</authors>
+    <authors>Paul Seal, Ian Houghton, Laura Weatherhead, Marc Goodson</authors>
     <owners>Paul Seal</owners>
     <licenseUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/</projectUrl>
