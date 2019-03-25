@@ -66,7 +66,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             StatusResultType resultType = StatusResultType.Info;
 
             var message = "Our.Umbraco.UnVersion is installed, see /config/Unversion.config for versioning policy settings";
-            if (isUnversionInstalled)
+            if (!isUnversionInstalled)
             {
                 resultType = StatusResultType.Warning;
                 message = "'Our.Umbraco.UnVersion' is NOT installed, consider installing this package to help create a version history retainment policy.";
