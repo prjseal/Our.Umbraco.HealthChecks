@@ -46,7 +46,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
         {
             get
             {
-                bool isRecommended = AcceptableValues().Select(x => x.ToLower()).Contains(CurrentValue.ToLower());
+                bool isRecommended = AcceptableValues().Select(x => x.ToLower()).Contains(CurrentValue?.ToLower());
                                                             
                 return isRecommended
                     ? $"Log4Net priority is set to '{CurrentValue}'"
