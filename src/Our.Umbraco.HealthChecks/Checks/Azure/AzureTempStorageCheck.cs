@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Configuration;
+using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure
@@ -10,10 +11,6 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
     Group = "Azure")]
     public class AzureTempStorageCheck : HealthCheck
     {
-        public AzureTempStorageCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
-        {
-        }
-
         public override IEnumerable<HealthCheckStatus> GetStatus()
         {
             //return the statuses
@@ -27,17 +24,8 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
 
         private static HealthCheckStatus CheckTempStorage()
         {
-            var umbracoVersion = WebConfigurationManager.AppSettings["umbracoConfigurationStatus"].Split('.');
-
-            var umbMajorVersion = int.Parse(umbracoVersion[0]);
-            var umbMinorVersion = int.Parse(umbracoVersion[1]);
-
-            var matchingValue = umbMinorVersion >= 7 ? "EnvironmentTemp" : "true";
-            var appSetting = umbMinorVersion >= 7
-                ? "umbracoLocalTempStorage"
-                : umbMinorVersion >= 6
-                    ? "umbracoContentXMLStorage"
-                    : "umbracoContentXMLUseLocalTemp";
+            var matchingValue = "EnvironmentTemp";
+            var appSetting = "umbracoLocalTempStorage";
 
             var tempStorageSetting = WebConfigurationManager.AppSettings[appSetting];
 

@@ -14,13 +14,13 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
     Group = "Configuration")]
     public class PostProcessorCheck : HealthCheck
     {
-        protected readonly ILocalizedTextService TextService;
+        protected readonly ILocalizedTextService _textService;
         private const string FilePath = "~/packages.config";
         private const string XPath = "//packages/package[@id='ImageProcessor.Web.PostProcessor']";
 
-        public PostProcessorCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
+        public PostProcessorCheck(ILocalizedTextService textService)
         {
-            TextService = healthCheckContext.ApplicationContext.Services.TextService;
+            _textService = textService;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
@@ -47,13 +47,13 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
                 if (xmlNode != null)
                 {
                     success = true;
-                    message.Append(TextService.Localize("Our.Umbraco.HealthChecks/postProcessorSuccess"));
+                    message.Append(_textService.Localize("Our.Umbraco.HealthChecks/postProcessorSuccess"));
                 }
             }
 
             if(!success)
             {
-                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/postProcessorError"));
+                message.Append(_textService.Localize("Our.Umbraco.HealthChecks/postProcessorError"));
             }
 
             var actions = new List<HealthCheckAction>();

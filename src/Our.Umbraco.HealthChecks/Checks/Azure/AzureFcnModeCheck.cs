@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 using Umbraco.Web.HealthCheck.Checks.Config;
 
@@ -10,9 +11,11 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
         Group = "Azure")]
     public class AzureFcnModeCheck : AbstractConfigCheck
     {
-        public AzureFcnModeCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
-        {
+        private ILocalizedTextService _textService;
 
+        public AzureFcnModeCheck(ILocalizedTextService textService) : base(textService)
+        {
+            _textService = textService;
         }
 
         public override string FilePath

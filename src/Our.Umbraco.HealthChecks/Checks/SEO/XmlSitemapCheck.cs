@@ -17,15 +17,15 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
     Group = "SEO")]
     public class XmlSitemapCheck : HealthCheck
     {
-        protected readonly ILocalizedTextService TextService;
+        protected readonly ILocalizedTextService _textService;
         protected readonly string BaseUrl;
         protected bool CheckSitemapUrlStatus;
         protected int RobotSitemaps;
         protected int RobotSitemapsChecked;
         
-        public XmlSitemapCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
+        public XmlSitemapCheck(ILocalizedTextService textService)
         {
-            TextService = healthCheckContext.ApplicationContext.Services.TextService;
+            _textService = textService;
             BaseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -82,7 +82,7 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
             using (var client = new HttpClient())
             {
                 var response = await client.GetAsync(url).ConfigureAwait(false);
-                var msg = defaultSitemap ? TextService.Localize("Our.Umbraco.HealthChecks/sitemapDefaultMessage") : string.Format("{0} {1}", TextService.Localize("Our.Umbraco.HealthChecks/sitemapDefaultMessage"), url);
+                var msg = defaultSitemap ? _textService.Localize("Our.Umbraco.HealthChecks/sitemapDefaultMessage") : string.Format("{0} {1}", _textService.Localize("Our.Umbraco.HealthChecks/sitemapDefaultMessage"), url);
 
                 switch (response.StatusCode)
                 {
@@ -95,16 +95,16 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
                         {
                             RobotSitemapsChecked++;
                         }
-                        message.Append(string.Format("{0} {1}", msg, TextService.Localize("Our.Umbraco.HealthChecks/sitemapFound")));
+                        message.Append(string.Format("{0} {1}", msg, _textService.Localize("Our.Umbraco.HealthChecks/sitemapFound")));
                         message.Append("<br/>");
                         break;
                     case HttpStatusCode.NotFound:
-                        message.Append(string.Format("{0} {1}", msg, TextService.Localize("Our.Umbraco.HealthChecks/sitemapNotFound")));
+                        message.Append(string.Format("{0} {1}", msg, _textService.Localize("Our.Umbraco.HealthChecks/sitemapNotFound")));
                         message.Append("<br/>");
                         break;
                     case HttpStatusCode.InternalServerError:
                     case HttpStatusCode.BadRequest:
-                        message.Append(string.Format("{0} {1}", TextService.Localize("Our.Umbraco.HealthChecks/sitemapError"), msg));
+                        message.Append(string.Format("{0} {1}", _textService.Localize("Our.Umbraco.HealthChecks/sitemapError"), msg));
                         message.Append("<br/>");
                         break;
                 }
@@ -123,7 +123,7 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
                     var content = await response.Content.ReadAsStringAsync();
                     if (string.IsNullOrEmpty(content))
                     {
-                        message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsEmpty"));
+                        message.Append(_textService.Localize("Our.Umbraco.HealthChecks/robotsEmpty"));
                         message.Append("<br/>");
                     }
                     else
@@ -145,13 +145,13 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
                             }
                             else
                             {
-                                message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsContainsNoSitemaps"));
+                                message.Append(_textService.Localize("Our.Umbraco.HealthChecks/robotsContainsNoSitemaps"));
                                 message.Append("<br/>");
                             }
                         }
                         else
                         {
-                            message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsEmpty"));
+                            message.Append(_textService.Localize("Our.Umbraco.HealthChecks/robotsEmpty"));
                             message.Append("<br/>");
                         }
                     }
@@ -161,11 +161,11 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
                     switch (response.StatusCode)
                     {
                         case HttpStatusCode.NotFound:
-                            message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsNotFound"));
+                            message.Append(_textService.Localize("Our.Umbraco.HealthChecks/robotsNotFound"));
                             break;
                         case HttpStatusCode.InternalServerError:
                         case HttpStatusCode.BadRequest:
-                            message.Append(TextService.Localize("Our.Umbraco.HealthChecks/robotsError"));
+                            message.Append(_textService.Localize("Our.Umbraco.HealthChecks/robotsError"));
                             break;
                     }
                     // Make the count less than RobotSitemaps to make check fail
