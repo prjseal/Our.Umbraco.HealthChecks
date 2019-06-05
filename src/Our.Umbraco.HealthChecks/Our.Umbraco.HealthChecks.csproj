@@ -236,8 +236,7 @@
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
     <Compile Include="Checks\SEO\XmlSitemapCheck.cs" />
-    <Compile Include="Compose\RegisterServicesComponent.cs" />
-    <Compile Include="Compose\RegisterServicesComposer.cs" />
+    <Compile Include="Composers\RegisterServicesComposer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
