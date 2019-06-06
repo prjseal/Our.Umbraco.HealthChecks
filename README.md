@@ -36,19 +36,22 @@ If you are looking for the Umbraco v7 version then switch to the dev/v7 branch
 
 ## The following Umbraco v7 checks were removed from the Umbraco v8 version:
 
-| Check                        | Reason                                                        |
-| ---------------------------- |:--------------------------------------------------------------|
-| **Config**                   |                                                               |
-| ExamineRebuildOnStartCheck   | Removed to start with as Examine config has been removed      |
-| **Data Integrity**           |                                                               |
-| ContentVersionsCheck         | Removed until we understand how to query the content versions |
-| **SEO**                      |                                                               |
-| LorumIpsumCheck              | Removed until we understand how to search using Examine       |
-| XmlSitemapCheck              | Removed until we understand how to get the httpcontext        |
-| **Security**                 |                                                               |
-| HstsCheck                    | Exists in Core                                                |
-| TlsCheck                     | Exists in Core                                                |
-| ClientDependencyVersionCheck | Removed because of no current vulnerabilities in Umbraco v8   |
+| Check                        | Reason                                                            |
+| ---------------------------- |:------------------------------------------------------------------|
+| **Azure**                    |                                                                   |
+| AzureExamineCheck            | Removed because Examine config has been removed.                  |
+| AzureLoggingCheck            | Removed now we have moved to serilog                              |
+| **Config**                   |                                                                   |
+| ExamineRebuildOnStartCheck   | Removed because Examine config has been removed                   |
+| **Data Integrity**           |                                                                   |
+| ContentVersionsCheck         | Removed until we understand how to query the content versions     |
+| **SEO**                      |                                                                   |
+| LorumIpsumCheck              | Removed until we understand how to search using Examine           |
+| XmlSitemapCheck              | Removed until we understand how to get the httpcontext            |
+| **Security**                 |                                                                   |
+| HstsCheck                    | Exists in Core                                                    |
+| TlsCheck                     | Exists in Core                                                    |
+| ClientDependencyVersionCheck | Removed because of no current vulnerabilities in Umbraco v8       |
 
 ## Suggest Checks
 
