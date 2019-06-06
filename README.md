@@ -7,6 +7,10 @@
 
 [![NuGet](https://img.shields.io/nuget/dt/Our.Umbraco.HealthChecks.svg)](https://www.nuget.org/packages/Our.Umbraco.HealthChecks/)
 
+## The master branch is the Work In Progress branch for Umbraco v8
+
+## The dev/v7 branch is the current released branch for Umbraco v7
+
 This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
 Please follow the naming of the folders and checks which are in the [Umbraco Core Health Checks](https://github.com/umbraco/Umbraco-CMS/tree/dev-v7/src/Umbraco.Web/HealthCheck/Checks)
