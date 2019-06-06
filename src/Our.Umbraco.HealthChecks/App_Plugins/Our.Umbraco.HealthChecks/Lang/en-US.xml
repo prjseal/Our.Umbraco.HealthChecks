@@ -8,8 +8,8 @@
     <key alias="umbracoPathCheckPathChanged">You have changed the umbraco path from the default.</key>
     <key alias="umbracoPathCheckReservedPathMissing"><![CDATA[Your umbraco path is not in the <strong>umbracoReservedPaths</strong> appSetting value.]]></key>
     <key alias="umbracoPathCheckConsiderChangingPath">You should consider changing the umbraco path for security reasons.</key>
-    <key alias="umbracoPathCheckInstructions1"><![CDATA[In the appSettings, change the value of <strong>umbracoPath</strong> to something not obvious to hackers, like <strong>my-secret-backoffice-url</strong> (use <strong>-</strong> instead of spaces.)]]></key>
-    <key alias="umbracoPathCheckInstructions2"><![CDATA[Add this to the other appSetting <strong>umbracoReservedPaths</strong>. You can replace <strong>~/umbraco</strong>]]></key>
+    <key alias="umbracoPathCheckInstructions1"><![CDATA[In the appSettings, change the value of <strong>Umbraco.Core.Path</strong> to something not obvious to hackers, like <strong>my-secret-backoffice-url</strong> (use <strong>-</strong> instead of spaces.)]]></key>
+    <key alias="umbracoPathCheckInstructions2"><![CDATA[Add this to the other appSetting <strong>Umbraco.Core.ReservedPaths</strong>. You can replace <strong>~/umbraco</strong>]]></key>
     <key alias="umbracoPathCheckInstructions3"><![CDATA[Change the name of the umbraco folder to be the same name.]]></key>
     <key alias="umbracoPathCheckInstructions4"><![CDATA[Test that everything still works.]]></key>
     <key alias="umbracoPathCheckWarning"><![CDATA[<strong>BEWARE</strong> This could break some packages which rely on the default umbraco path, so test it first.]]></key>

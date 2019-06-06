@@ -32,8 +32,8 @@ namespace Our.Umbraco.HealthChecks.Checks.Config
 
         private HealthCheckStatus CheckUmbracoPath()
         {
-            var umbracoPath = WebConfigurationManager.AppSettings["umbracoPath"];
-            var umbracoReservedPaths = WebConfigurationManager.AppSettings["umbracoReservedPaths"];
+            var umbracoPath = WebConfigurationManager.AppSettings["Umbraco.Core.Path"];
+            var umbracoReservedPaths = WebConfigurationManager.AppSettings["Umbraco.Core.ReservedPaths"];
 
             bool success = false;
             StringBuilder message = new StringBuilder();
