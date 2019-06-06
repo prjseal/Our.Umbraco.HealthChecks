@@ -4,7 +4,7 @@ branches:
   only:
     - master
 before_build:
-- ps: nuget restore src/Our.Umbraco.HealthChecks.Web.sln
+- ps: nuget restore src/Our.Umbraco.HealthChecks.sln
 build:
   project: src/Our.Umbraco.HealthChecks/Our.Umbraco.HealthChecks.csproj
   publish_nuget: true
