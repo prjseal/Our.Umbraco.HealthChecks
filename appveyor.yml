@@ -1,4 +1,8 @@
 version: 1.0.{build}
+image: Visual Studio 2017
+branches:
+  only:
+    - master
 before_build:
 - ps: nuget restore src/Our.Umbraco.HealthChecks.Web.sln
 build:
