@@ -7,10 +7,6 @@
 
 [![NuGet](https://img.shields.io/nuget/dt/Our.Umbraco.HealthChecks.svg)](https://www.nuget.org/packages/Our.Umbraco.HealthChecks/)
 
-## The master branch is the Work In Progress branch for Umbraco v8
-
-## The dev/v7 branch is the current released branch for Umbraco v7
-
 This repo is a collection of community written [Health Checks](https://our.umbraco.com/Documentation/Extending/Health-Check/) for Umbraco CMS.
 
 Please follow the naming of the folders and checks which are in the [Umbraco Core Health Checks](https://github.com/umbraco/Umbraco-CMS/tree/dev-v7/src/Umbraco.Web/HealthCheck/Checks)
@@ -22,49 +18,37 @@ You can login to the website and test the health checks. Here are the login deta
 <strong>username:</strong> admin@admin.com<br/>
 <strong>password:</strong> 1234567890
 
-## Current Checks
+This package has been ported over from Umbraco v7 to Umbraco v8.
+If you are looking for the Umbraco v7 version then switch to the dev/v7 branch
 
-### Azure
+## Checks ported to the Umbraco v8 version:
 
-#### Azure Examine Compatibility Check
+| Check                 | Description                                                            |
+| --------------------- |:---------------------------------------------------------------------- |
+| **Azure**             |                                                                        |
+| AzureFcnModeCheck     | Checks that fcnMode config is appropriate for the Azure platform.      |
+| AzureTempStorageCheck | Checks that temp storage config is appropriate for the Azure platform. |
+| **Config**            |                                                                        |
+| PostProcessorCheck    | Check if ImageProcessor.Web.PostProcessor is installed                 |
+| UmbracoPathCheck      | Checks to see if you have changed the umbraco path.                    |
+| **Security**          |                                                                        |
+| AdminUserCheck        | Check the admin user isn't called 'admin'                              |
 
-Checks that examine settings are appropriate for the Azure platform.
+## The following Umbraco v7 checks were removed from the Umbraco v8 version:
 
-#### Azure File Change Notification Config Check
-
-Checks that fcnMode config is appropriate for the Azure platform.
-
-#### Azure Logging Check
-
-Checks that logging patterns are appropriate for the Azure platform.
-
-#### Azure Temp Storage Config Check
-
-Checks that temp storage config is appropriate for the Azure platform.
-
-### Config
-
-#### Examine Rebuild On Startup
-
-Check whether examine rebuild on start is off
-
-#### Umbraco Path Check
-
-Checks to see if you have changed the umbraco path.
-
-### PostProcessor Check
-
-Checks if ImageProcessor.Web.PostProcessor is installed.
-
-### Security
-
-#### Admin User Check
-
-Check the admin user isn't called 'admin'
-
-#### TLS Check
-
-Check the TLS protocol being used
+| Check                        | Reason                                                        |
+| ---------------------------- |:--------------------------------------------------------------|
+| **Config**                   |                                                               |
+| ExamineRebuildOnStartCheck   | Removed to start with as Examine config has been removed      |
+| **Data Integrity**           |                                                               |
+| ContentVersionsCheck         | Removed until we understand how to query the content versions |
+| **SEO**                      |                                                               |
+| LorumIpsumCheck              | Removed until we understand how to search using Examine       |
+| XmlSitemapCheck              | Removed until we understand how to get the httpcontext        |
+| **Security**                 |                                                               |
+| HstsCheck                    | Exists in Core                                                |
+| TlsCheck                     | Exists in Core                                                |
+| ClientDependencyVersionCheck | Removed because of no current vulnerabilities in Umbraco v8   |
 
 ## Suggest Checks
 
