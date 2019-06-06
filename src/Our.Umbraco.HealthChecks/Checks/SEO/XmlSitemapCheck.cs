@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.SEO
@@ -18,15 +19,18 @@ namespace Our.Umbraco.HealthChecks.Checks.SEO
     public class XmlSitemapCheck : HealthCheck
     {
         protected readonly ILocalizedTextService _textService;
+        protected readonly IUmbracoContextAccessor _umbracoContextAccessor;
         protected readonly string BaseUrl;
         protected bool CheckSitemapUrlStatus;
         protected int RobotSitemaps;
         protected int RobotSitemapsChecked;
         
-        public XmlSitemapCheck(ILocalizedTextService textService)
+        public XmlSitemapCheck(ILocalizedTextService textService, IUmbracoContextAccessor umbracoContextAccessor)
         {
             _textService = textService;
-            BaseUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
+            _umbracoContextAccessor = umbracoContextAccessor;
+            var umbracoContext = _umbracoContextAccessor.UmbracoContext;
+            BaseUrl =  umbracoContext.HttpContext.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
