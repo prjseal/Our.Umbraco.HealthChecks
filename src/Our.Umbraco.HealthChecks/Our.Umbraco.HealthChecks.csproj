@@ -210,6 +210,7 @@
     <Compile Include="Checks\Azure\AzureTempStorageCheck.cs" />
     <Compile Include="Checks\Config\PostProcessorCheck.cs" />
     <Compile Include="Checks\DataIntegrity\ContentVersionsCheck.cs" />
+    <Compile Include="Checks\DataIntegrity\MediaIntegrityCheck.cs" />
     <Compile Include="Checks\Security\ClientDependencyVersionCheck.cs" />
     <Compile Include="Checks\Security\HstsCheck.cs" />
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
