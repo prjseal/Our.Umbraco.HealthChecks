@@ -67,17 +67,17 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
             foreach (string file in Directory.EnumerateFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
             {
-                //Prevent any .config files from being included in the disk results
-                if (!Regex.IsMatch(file, @".[c|C]onfig"))
+                StringBuilder filPath = new StringBuilder(file);
+                //Remove web root path from media path
+                filPath.Replace(_webRoot, "");
+                //Change backslash to forward slash in path
+                filPath.Replace("\\", "/");
+                filPath.Replace("Media", "media");
+                string cleanedFilePath = filPath.ToString();
+                //Path must start with Media or media followed by a / then any length of number then a / followed by any number of characters
+                if (Regex.IsMatch(cleanedFilePath, @"^[M|m]edia\/[0-9]+\/.+"))
                 {
-                    StringBuilder cleanedFile = new StringBuilder(file);
-                    //Remove web root path from media path
-                    cleanedFile.Replace(_webRoot, "");
-                    //Change backslash to forward slash in path
-                    cleanedFile.Replace("\\", "/");
-                    cleanedFile.Replace("Media", "media");
-
-                    mediaFiles.Add(cleanedFile.ToString());
+                    mediaFiles.Add(cleanedFilePath);
                 }
 
             }
@@ -98,37 +98,39 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
         private HealthCheckStatus CheckMediaIntegrity()
         {
             string resultMessage = string.Empty;
-            int found = 0;
+            int foundInContent = 0;
+            int foundInMedia = 0;
+            int orphanedMedia = 0;
             HashSet<string> mediaOnDisk = ScanMediaOnDisk();
+            string brokenImg = "";
             foreach (var item in mediaOnDisk)
             {
-                //Query the media service first
-                var media = _mediaService.GetMediaByPath(item);
 
-                if (media == null)
+                //Query the umbraco.config to see if there is any references for the specific media item within the content
+                //TODO: Need to check for images inside siteLogo element of cache
+                var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
+                if (mediaInCache.Count() != 0)
                 {
-                    //Query the umbraco.config to see if there is any references for the specific media item within the content
-                    //TODO: Need to check for images inside siteLogo element of cache
-                    var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'"+ item + "')]]/parent::*");
-                    if (mediaInCache.Count() != 0)
-                    {
-                        found += 1;
-                    }
+                    foundInContent += 1;
                 }
                 else
                 {
-                    found += 1;
+                    //Possibly broken in 7.5 may have to resort to database queries
+                    //TODO: Query the media table instead
+                    var media = _mediaService.GetMediaByPath(item);
+                    if (media != null)
+                        foundInMedia += 1;
+
+                    else
+                        brokenImg += item.ToString() + " ";
+                    orphanedMedia += 1;
                 }
 
             }
 
             StatusResultType resultType = StatusResultType.Warning;
-            if (mediaOnDisk.Count() == found)
-            {
-                resultType = StatusResultType.Info;
-            }
             var actions = new List<HealthCheckAction>();
-            resultMessage = String.Format("Found {0} media items on disk and {1} items are currently being used by Umbraco", mediaOnDisk.Count().ToString(), found);
+            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content and I found {2} items in the database that are not currently in the content, {3} items appear to be orphaned {4}", mediaOnDisk.Count().ToString(), foundInContent, foundInMedia, orphanedMedia, brokenImg);
             return
                 new HealthCheckStatus(resultMessage)
                 {
