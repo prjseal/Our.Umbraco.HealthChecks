@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Examine;
+using Examine.Providers;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.IO;
 using Umbraco.Core.Persistence;
@@ -16,7 +18,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
     [HealthCheck(
         "d6af141b-d330-4db1-a35f-5cbefd85d04a",
         "Media Integrity Check",
-        Description = "Check for any orphaned Media on disk",
+        Description = "Check for any orphaned Media on disk, please ensure you have performed a full site republish before running this test, you can do this by visiting: /umbraco/dialogs/republish.aspx?xml=true and clicking republish entire site",
         Group = "Media")]
     public class MediaIntegrityCheck : HealthCheck
     {
@@ -27,6 +29,9 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
         private readonly IMediaService _mediaService;
         private readonly ContextualPublishedCache _umbracoCache;
         private readonly string _webRoot;
+        private readonly BaseSearchProvider _internalIndex;
+        //Our flagged media items are added here
+        private HashSet<string> flaggedMediaItems = new HashSet<string>();
         public MediaIntegrityCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             _textService = healthCheckContext.ApplicationContext.Services.TextService;
@@ -35,9 +40,39 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             _mediaService = healthCheckContext.ApplicationContext.Services.MediaService;
             _umbracoCache = healthCheckContext.UmbracoContext.ContentCache;
             _webRoot = IOHelper.MapPath("/");
+            _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
         }
         //TODO: Organise regions better
         #region Discovery
+            /// <summary>
+            /// Will query the Examine InternalIndex for media items
+            /// A media item has the key __IndexType with the value of media
+            /// So we query for items in the index using this key and were able to pull all media from examine
+            /// We then apply some regex to grab just the path to the media item and store it in a hashset
+            /// </summary>
+            /// <returns>
+            /// A hashset containing paths to media or an empty hashset if nothing is found
+            /// </returns>
+        private HashSet<string> QueryMediaFromInternalIndex()
+        {
+            HashSet<string> mediaItems = new HashSet<string>();
+            var searchCriteria = _internalIndex.CreateSearchCriteria();
+            var query = searchCriteria.RawQuery("+__IndexType:media");
+            var searchResults = _internalIndex.Search(query);
+            if (searchResults.Any())
+            {
+                foreach (var itemResult in searchResults)
+                {
+                    // \/[M|m]edia\/[0-9]+\/([^']+)
+                    // This regex pattern will match the media path within the umbracoFile entry in the examine search {src: '/media/1050/myimage.jpg', crops: []}
+                    // In the above example /media/1050/myimage.jpg will be extracted from the entry
+                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"\/[M|m]edia\/[0-9]+\/([^']+)").Value);
+                }
+
+                return mediaItems;
+            }
+            return new HashSet<string>();
+        }
 
         #region Disk Checking
         /// <summary>
@@ -130,7 +165,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
             StatusResultType resultType = StatusResultType.Warning;
             var actions = new List<HealthCheckAction>();
-            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content and I found {2} items in the database that are not currently in the content, {3} items appear to be orphaned {4}", mediaOnDisk.Count().ToString(), foundInContent, foundInMedia, orphanedMedia, brokenImg);
+            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content and I found {2} items in the database that are not currently in the content, {3} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInMedia, orphanedMedia);
             return
                 new HealthCheckStatus(resultMessage)
                 {
