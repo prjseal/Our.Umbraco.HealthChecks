@@ -42,7 +42,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             _webRoot = IOHelper.MapPath("/");
             _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
         }
-        //TODO: Organise regions better
+        //TODO: Organize regions better
         #region Discovery
             /// <summary>
             /// Will query the Examine InternalIndex for media items
@@ -66,7 +66,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
                     // \/[M|m]edia\/[0-9]+\/([^']+)
                     // This regex pattern will match the media path within the umbracoFile entry in the examine search {src: '/media/1050/myimage.jpg', crops: []}
                     // In the above example /media/1050/myimage.jpg will be extracted from the entry
-                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"\/[M|m]edia\/[0-9]+\/([^']+)").Value);
+                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"[M|m]edia\/[0-9]+\/([^']+)").Value);
                 }
 
                 return mediaItems;
@@ -127,45 +127,81 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
         #region Healthchecks
         /// <summary>
         /// Takes a hashset of media item paths from disk and queries these paths against the media service and umbraco.confg
-        /// TODO: Figure out a way to accruately query the Examine Index without using a query that starts with a wildcard (Examine would be a better alternative to the XML cache)
+        /// TODO: Figure out a way to accurately query the Examine Internal Index without using a query that starts with a wildcard (Examine would be a better alternative to the XML cache)
         /// </summary>
         /// <returns>HealthCheck Status for this check</returns>
         private HealthCheckStatus CheckMediaIntegrity()
         {
             string resultMessage = string.Empty;
             int foundInContent = 0;
+            int foundInSiteLogoContent = 0;
             int foundInMedia = 0;
             int orphanedMedia = 0;
             HashSet<string> mediaOnDisk = ScanMediaOnDisk();
+            HashSet<string> mediaInIndex = QueryMediaFromInternalIndex();
+            HashSet<string> orphanedMediaItems = new HashSet<string>();
             string brokenImg = "";
             foreach (var item in mediaOnDisk)
             {
 
-                //Query the umbraco.config to see if there is any references for the specific media item within the content
-                //TODO: Need to check for images inside siteLogo element of cache
-                var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
-                if (mediaInCache.Count() != 0)
+                
+                
+                //var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
+                //if (mediaInCache.Count() != 0)
+                //{
+                //    foundInContent += 1;
+                //}
+                //else
+                //{
+                //    //Possibly broken in 7.5 may have to resort to database queries
+                //    //TODO: Query the media table instead
+                //    var media = _mediaService.GetMediaByPath(item);
+                //    if (media != null)
+                //        foundInMedia += 1;
+
+                //    else
+                //        brokenImg += item.ToString() + " ";
+                //    orphanedMedia += 1;
+                //}
+                if (!mediaInIndex.Contains(item))
                 {
-                    foundInContent += 1;
+                    //Query the umbraco.config to see if there is any references for the specific media item within the content
+                    //TODO: Need to check for images inside siteLogo element of cache
+                    //Not found in Internal Index
+                    var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
+                    if (mediaInCache.Count() != 0)
+                    {
+                        //Found in umbraco.config
+                            foundInContent += 1;
+                    }
+                    else
+                    {
+                        mediaInCache = _umbracoCache.GetByXPath("//siteLogo[text()[contains(.,'" + item + "')]]/parent::*");
+                        if (mediaInCache.Count() != 0)
+                        {
+                            foundInSiteLogoContent += 1;
+                        }
+                        else
+                        {
+                            //Not found in Content
+                            //Query CMSMedia table as a last resort
+                            orphanedMediaItems.Add(item);
+                        }
+                        
+
+                    }
                 }
                 else
                 {
-                    //Possibly broken in 7.5 may have to resort to database queries
-                    //TODO: Query the media table instead
-                    var media = _mediaService.GetMediaByPath(item);
-                    if (media != null)
-                        foundInMedia += 1;
-
-                    else
-                        brokenImg += item.ToString() + " ";
-                    orphanedMedia += 1;
+                    //Found in Internal Index
+                    foundInMedia += 1;
                 }
 
             }
 
             StatusResultType resultType = StatusResultType.Warning;
             var actions = new List<HealthCheckAction>();
-            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content and I found {2} items in the database that are not currently in the content, {3} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInMedia, orphanedMedia);
+            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content, {2} in the site logo content and I found {3} items in the internal index, {4} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInSiteLogoContent, foundInMedia, orphanedMedia);
             return
                 new HealthCheckStatus(resultMessage)
                 {
