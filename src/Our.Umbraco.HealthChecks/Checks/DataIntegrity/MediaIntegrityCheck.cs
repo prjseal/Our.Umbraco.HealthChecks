@@ -24,6 +24,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
     {
         private readonly UmbracoDatabase _db;
         private readonly ILocalizedTextService _textService;
+        private const string MoveOrphanedMediaAction = "moveOrphanedMedia";
         //Keeping Umbraco Version for now might come in handy if I decide the query the database
         private readonly Version _umbracoVersion;
         private readonly IMediaService _mediaService;
@@ -132,6 +133,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
         /// <returns>HealthCheck Status for this check</returns>
         private HealthCheckStatus CheckMediaIntegrity()
         {
+            bool success = false;
             string resultMessage = string.Empty;
             int foundInContent = 0;
             int foundInSiteLogoContent = 0;
@@ -140,29 +142,9 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             HashSet<string> mediaOnDisk = ScanMediaOnDisk();
             HashSet<string> mediaInIndex = QueryMediaFromInternalIndex();
             HashSet<string> orphanedMediaItems = new HashSet<string>();
-            string brokenImg = "";
             foreach (var item in mediaOnDisk)
             {
 
-                
-                
-                //var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
-                //if (mediaInCache.Count() != 0)
-                //{
-                //    foundInContent += 1;
-                //}
-                //else
-                //{
-                //    //Possibly broken in 7.5 may have to resort to database queries
-                //    //TODO: Query the media table instead
-                //    var media = _mediaService.GetMediaByPath(item);
-                //    if (media != null)
-                //        foundInMedia += 1;
-
-                //    else
-                //        brokenImg += item.ToString() + " ";
-                //    orphanedMedia += 1;
-                //}
                 if (!mediaInIndex.Contains(item))
                 {
                     //Query the umbraco.config to see if there is any references for the specific media item within the content
@@ -198,14 +180,22 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
                 }
 
             }
-
-            StatusResultType resultType = StatusResultType.Warning;
+            success = orphanedMediaItems.Count == 0;
+            //StatusResultType resultType = StatusResultType.Warning;
             var actions = new List<HealthCheckAction>();
+            if (success == false)
+            {
+                actions.Add(new HealthCheckAction(MoveOrphanedMediaAction, Id)
+                {
+                    Name = _textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMedia"),
+                    Description = _textService.Localize("Our.Umbraco.HealthChecks/orphanedMediaDescription")
+                });
+            }
             resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content, {2} in the site logo content and I found {3} items in the internal index, {4} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInSiteLogoContent, foundInMedia, orphanedMedia);
             return
                 new HealthCheckStatus(resultMessage)
                 {
-                    ResultType = resultType,
+                    ResultType = success ? StatusResultType.Success : StatusResultType.Error,
                     Actions = actions
                 };
         }
@@ -214,7 +204,28 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
         public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
         {
-            throw new NotImplementedException();
+            switch (action.Alias)
+            {
+                case MoveOrphanedMediaAction:
+                    return MoveOrphanedMedia();
+                default:
+                    throw new InvalidOperationException("Move Orphaned Media action requested is either not executable or does not exist");
+            }
+        }
+
+        private HealthCheckStatus MoveOrphanedMedia()
+        {
+            return
+                    new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaSuccess"))
+                    {
+                        ResultType = StatusResultType.Success
+                    };
+
+            //return
+            //        new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaError"))
+            //        {
+            //            ResultType = StatusResultType.Error
+            //        };
         }
 
         public override IEnumerable<HealthCheckStatus> GetStatus()
