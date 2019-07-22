@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Examine;
 using Examine.Providers;
+using Newtonsoft.Json.Linq;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.IO;
 using Umbraco.Core.Persistence;
@@ -31,8 +32,6 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
         private readonly ContextualPublishedCache _umbracoCache;
         private readonly string _webRoot;
         private readonly BaseSearchProvider _internalIndex;
-        //Our flagged media items are added here
-        private HashSet<string> flaggedMediaItems = new HashSet<string>();
         public MediaIntegrityCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             _textService = healthCheckContext.ApplicationContext.Services.TextService;
@@ -138,7 +137,6 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             int foundInContent = 0;
             int foundInSiteLogoContent = 0;
             int foundInMedia = 0;
-            int orphanedMedia = 0;
             HashSet<string> mediaOnDisk = ScanMediaOnDisk();
             HashSet<string> mediaInIndex = QueryMediaFromInternalIndex();
             HashSet<string> orphanedMediaItems = new HashSet<string>();
@@ -183,15 +181,18 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             success = orphanedMediaItems.Count == 0;
             //StatusResultType resultType = StatusResultType.Warning;
             var actions = new List<HealthCheckAction>();
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("flaggedMediaItems", orphanedMediaItems);
             if (success == false)
             {
                 actions.Add(new HealthCheckAction(MoveOrphanedMediaAction, Id)
                 {
                     Name = _textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMedia"),
-                    Description = _textService.Localize("Our.Umbraco.HealthChecks/orphanedMediaDescription")
+                    Description = _textService.Localize("Our.Umbraco.HealthChecks/orphanedMediaDescription"),
+                    ActionParameters = parameters,
                 });
             }
-            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content, {2} in the site logo content and I found {3} items in the internal index, {4} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInSiteLogoContent, foundInMedia, orphanedMedia);
+            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content, {2} in the site logo content and I found {3} items in the internal index, {4} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInSiteLogoContent, foundInMedia, orphanedMediaItems.Count);
             return
                 new HealthCheckStatus(resultMessage)
                 {
@@ -207,20 +208,48 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             switch (action.Alias)
             {
                 case MoveOrphanedMediaAction:
-                    return MoveOrphanedMedia();
+                    JArray flaggedMedia = (JArray)action.ActionParameters["flaggedMediaItems"];
+                    return MoveOrphanedMedia(flaggedMedia);
                 default:
                     throw new InvalidOperationException("Move Orphaned Media action requested is either not executable or does not exist");
             }
         }
 
-        private HealthCheckStatus MoveOrphanedMedia()
+        private HealthCheckStatus MoveOrphanedMedia(JArray flaggedMediaItems)
         {
+            //HashSet<string> flaggedMediaItems1 = flaggedMediaItems as HashSet<string>;
+            DirectoryInfo mediaFolder = new DirectoryInfo(IOHelper.MapPath("/Media"));
+
+            if (!mediaFolder.Exists)
+            {
+                throw new DirectoryNotFoundException();
+            }
+
+            //Attempt to create a folder outside the web root
+            DirectoryInfo webRoot = new DirectoryInfo(_webRoot);
+            string targetMediaFolderName = "badMedia-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            DirectoryInfo mediaDeposit = new DirectoryInfo(webRoot.Parent.FullName + "\\media-cleaner\\"+ targetMediaFolderName);
+            mediaDeposit.Create();
+            foreach (string item in flaggedMediaItems)
+            {
+                string source = IOHelper.MapPath("~/"+item);
+                string destination = mediaDeposit.FullName + "\\" + Regex.Replace(item,@"/",@"\");
+
+                DirectoryInfo file = new DirectoryInfo(Path.GetDirectoryName(destination));
+                file.Create();
+
+                File.Move(source, destination);
+            }
+
             return
                     new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaSuccess"))
                     {
                         ResultType = StatusResultType.Success
                     };
 
+            /*
+             * TODO: Log error condition here 
+             */
             //return
             //        new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaError"))
             //        {
