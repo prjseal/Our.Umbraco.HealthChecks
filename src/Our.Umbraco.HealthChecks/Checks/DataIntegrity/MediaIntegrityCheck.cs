@@ -19,14 +19,14 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
     [HealthCheck(
         "d6af141b-d330-4db1-a35f-5cbefd85d04a",
         "Media Integrity Check",
-        Description = "Check for any orphaned Media on disk, please ensure you have performed a full site republish before running this test, you can do this by visiting: /umbraco/dialogs/republish.aspx?xml=true and clicking republish entire site",
+        Description = "Check for any orphaned Media on disk, please ensure you have performed a full site republish and rebuilt your examine indexes before running this test, you can republish by visiting: /umbraco/dialogs/republish.aspx?xml=true and clicking republish entire site",
         Group = "Media")]
     public class MediaIntegrityCheck : HealthCheck
     {
         private readonly UmbracoDatabase _db;
         private readonly ILocalizedTextService _textService;
         private const string MoveOrphanedMediaAction = "moveOrphanedMedia";
-        //Keeping Umbraco Version for now might come in handy if I decide the query the database
+        //Keeping Umbraco Version and Umbraco Database for now might come in handy if I decide the query the database
         private readonly Version _umbracoVersion;
         private readonly IMediaService _mediaService;
         private readonly ContextualPublishedCache _umbracoCache;
@@ -42,7 +42,6 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             _webRoot = IOHelper.MapPath("/");
             _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
         }
-        //TODO: Organize regions better
         #region Discovery
             /// <summary>
             /// Will query the Examine InternalIndex for media items
@@ -73,10 +72,10 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             }
             return new HashSet<string>();
         }
-
+        #endregion
         #region Disk Checking
         /// <summary>
-        /// Obtains the location of the Media folder and stores all Files inside a HashSet
+        /// Obtains the location of the Media folder then scans and stores all file paths inside a HashSet
         /// </summary>
         /// <returns>HashSet of all items discovered in the media folder</returns>
         private HashSet<string> ScanMediaOnDisk()
@@ -122,14 +121,12 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
         #endregion
 
-        #endregion
-
         #region Healthchecks
         /// <summary>
-        /// Takes a hashset of media item paths from disk and queries these paths against the media service and umbraco.confg
-        /// TODO: Figure out a way to accurately query the Examine Internal Index without using a query that starts with a wildcard (Examine would be a better alternative to the XML cache)
+        /// Takes a hashset of media item paths from disk and queries these paths against the Examine Internal Index and umbraco.config
+        /// TODO: Figure out a way to accurately query the Examine Index without using a query that starts with a wildcard (Examine would be a better alternative to the XML cache) but is still fine to use
         /// </summary>
-        /// <returns>HealthCheck Status for this check</returns>
+        /// <returns>HealthCheck Status for this check, results are passed via ActionParameters </returns>
         private HealthCheckStatus CheckMediaIntegrity()
         {
             bool success = false;
@@ -167,8 +164,6 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
                             //Query CMSMedia table as a last resort
                             orphanedMediaItems.Add(item);
                         }
-                        
-
                     }
                 }
                 else
@@ -176,7 +171,6 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
                     //Found in Internal Index
                     foundInMedia += 1;
                 }
-
             }
             success = orphanedMediaItems.Count == 0;
             //StatusResultType resultType = StatusResultType.Warning;
@@ -203,6 +197,13 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
         #endregion
 
+        #region HealthCheck Action
+        /// <summary>
+        /// Grab our orphaned media from ActionParameters and cast to a JArray
+        /// so it can be iterated in MoveOrphanedMedia
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
         {
             switch (action.Alias)
@@ -214,10 +215,15 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
                     throw new InvalidOperationException("Move Orphaned Media action requested is either not executable or does not exist");
             }
         }
-
+        /// <summary>
+        /// Take our flaggedMediaItems and move them outside the web root into a folder named with a DateTime
+        /// </summary>
+        /// <param name="flaggedMediaItems"></param>
+        /// <returns></returns>
         private HealthCheckStatus MoveOrphanedMedia(JArray flaggedMediaItems)
         {
-            //HashSet<string> flaggedMediaItems1 = flaggedMediaItems as HashSet<string>;
+            //TODO: Set to false when we run into an issue
+            bool success = true;
             DirectoryInfo mediaFolder = new DirectoryInfo(IOHelper.MapPath("/Media"));
 
             if (!mediaFolder.Exists)
@@ -244,7 +250,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             return
                     new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaSuccess"))
                     {
-                        ResultType = StatusResultType.Success
+                        ResultType = success? StatusResultType.Success: StatusResultType.Error
                     };
 
             /*
@@ -262,5 +268,7 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             //return the statuses
             return new[] { CheckMediaIntegrity() };
         }
+
+        #endregion
     }
 }
