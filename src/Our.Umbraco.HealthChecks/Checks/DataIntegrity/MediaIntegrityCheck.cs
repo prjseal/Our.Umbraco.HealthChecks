@@ -83,14 +83,15 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
             //TODO: Get name of media folder as defined in the FileSystemProviders.config in case a site has a different name for their media
             //TODO: Test with site using a Virtual Directory in IIS (This will probably fail.)
             // Will fail if the media folder is lowercase
-            DirectoryInfo directoryInfo = new DirectoryInfo(IOHelper.MapPath("/Media"));
-
-            if (!directoryInfo.Exists)
+            DirectoryInfo mediaDirectory = new DirectoryInfo(IOHelper.MapPath("/Media"));
+            //Get Full Path for Media so we can clean the path strings that are placed into the hashset
+            string mediaDirectoryString = mediaDirectory.ToString().Replace("Media", "");
+            if (!mediaDirectory.Exists)
             {
                 throw new DirectoryNotFoundException();
             }
 
-            DirectoryInfo[] mediaFolders = directoryInfo.GetDirectories();
+            DirectoryInfo[] mediaFolders = mediaDirectory.GetDirectories();
 
             if (mediaFolders.Length == 0)
             {
@@ -99,15 +100,15 @@ namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
 
             var mediaFiles = new HashSet<string>();
 
-            foreach (string file in Directory.EnumerateFiles(directoryInfo.FullName, "*.*", SearchOption.AllDirectories))
+            foreach (string file in Directory.EnumerateFiles(mediaDirectory.FullName, "*.*", SearchOption.AllDirectories))
             {
-                StringBuilder filPath = new StringBuilder(file);
+                StringBuilder filePath = new StringBuilder(file);
                 //Remove web root path from media path
-                filPath.Replace(_webRoot, "");
+                filePath.Replace(mediaDirectoryString, "");
                 //Change backslash to forward slash in path
-                filPath.Replace("\\", "/");
-                filPath.Replace("Media", "media");
-                string cleanedFilePath = filPath.ToString();
+                filePath.Replace("\\", "/");
+                filePath.Replace("Media", "media");
+                string cleanedFilePath = filePath.ToString();
                 //Path must start with Media or media followed by a / then any length of number then a / followed by any number of characters
                 if (Regex.IsMatch(cleanedFilePath, @"^[M|m]edia\/[0-9]+\/.+"))
                 {
