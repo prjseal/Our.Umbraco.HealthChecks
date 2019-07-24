@@ -44,5 +44,9 @@
     <key alias="robotsContainsNoSitemaps">robots.txt does not contain any sitemaps.</key>
     <key alias="clientDependencyVersionCheckSuccess">The version of ClientDependency.Core in use is a safe version with no known vulnerabilities.</key>
     <key alias="clientDependencyVersionCheckError">The version of ClientDependency.Core in use has some known vulnerabilities. You need to upgrade Umbraco or patch the dll to a safe version. More details here: https://umbraco.com/blog/security-advisory-patch-for-your-site-is-now-available/</key>
+    <key alias="orphanedMediaDescription">This will move your orphaned media to another directory</key>
+    <key alias="moveOrphanedMedia">Move Orphaned Media</key>
+    <key alias="moveOrphanedMediaSuccess">Successfully moved Media to another directory</key>
+    <key alias="moveOrphanedMediaError">Unable to move Media to another directory</key>
   </area>
 </language>
