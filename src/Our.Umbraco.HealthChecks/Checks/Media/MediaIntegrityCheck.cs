@@ -14,7 +14,7 @@ using Umbraco.Core.Services;
 using Umbraco.Web.HealthCheck;
 using Umbraco.Web.PublishedCache;
 
-namespace Our.Umbraco.HealthChecks.Checks.DataIntegrity
+namespace Our.Umbraco.HealthChecks.Checks.Media
 {
     [HealthCheck(
         "d6af141b-d330-4db1-a35f-5cbefd85d04a",
