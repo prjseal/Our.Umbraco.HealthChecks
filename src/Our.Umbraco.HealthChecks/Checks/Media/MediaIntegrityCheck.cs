@@ -11,6 +11,7 @@ using Umbraco.Core.Configuration;
 using Umbraco.Core.IO;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 using Umbraco.Web.HealthCheck;
 using Umbraco.Web.PublishedCache;
 
@@ -38,7 +39,8 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             _db = healthCheckContext.ApplicationContext.DatabaseContext.Database;
             _umbracoVersion = UmbracoVersion.Current;
             _mediaService = healthCheckContext.ApplicationContext.Services.MediaService;
-            _umbracoCache = healthCheckContext.UmbracoContext.ContentCache;
+            _umbracoCache = UmbracoContext.Current.ContentCache;
+
             _webRoot = IOHelper.MapPath("/");
             _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
         }
@@ -56,7 +58,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
         {
             HashSet<string> mediaItems = new HashSet<string>();
             var searchCriteria = _internalIndex.CreateSearchCriteria();
-            var query = searchCriteria.RawQuery("+__IndexType:media");
+            var query = searchCriteria.RawQuery("+__IndexType:media +__Icon: icon-picture");
             var searchResults = _internalIndex.Search(query);
             if (searchResults.Any())
             {
