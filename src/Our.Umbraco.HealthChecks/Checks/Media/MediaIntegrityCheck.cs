@@ -67,7 +67,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
                     // \/[M|m]edia\/[0-9]+\/([^']+)
                     // This regex pattern will match the media path within the umbracoFile entry in the examine search {src: '/media/1050/myimage.jpg', crops: []}
                     // In the above example /media/1050/myimage.jpg will be extracted from the entry
-                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"[M|m]edia\/[0-9]+\/([^']+)").Value);
+                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"[M|m]edia\/[0-9]+\/([^'|""]+)").Value);
                 }
 
                 return mediaItems;
