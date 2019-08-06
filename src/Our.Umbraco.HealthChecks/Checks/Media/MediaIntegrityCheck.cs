@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using Examine;
 using Examine.Providers;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,7 @@ using Umbraco.Core.Configuration;
 using Umbraco.Core.IO;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 using Umbraco.Web.HealthCheck;
 using Umbraco.Web.PublishedCache;
 
@@ -31,6 +33,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
         private readonly IMediaService _mediaService;
         private readonly ContextualPublishedCache _umbracoCache;
         private readonly string _webRoot;
+        private readonly string _umbracoConfigPath;
         private readonly BaseSearchProvider _internalIndex;
         public MediaIntegrityCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
@@ -38,7 +41,10 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             _db = healthCheckContext.ApplicationContext.DatabaseContext.Database;
             _umbracoVersion = UmbracoVersion.Current;
             _mediaService = healthCheckContext.ApplicationContext.Services.MediaService;
-            _umbracoCache = healthCheckContext.UmbracoContext.ContentCache;
+            _umbracoCache = UmbracoContext.Current.ContentCache;
+            //Temporary
+            _umbracoConfigPath = IOHelper.MapPath("/App_Data/umbraco.config");
+
             _webRoot = IOHelper.MapPath("/");
             _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
         }
@@ -52,25 +58,47 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             /// <returns>
             /// A hashset containing paths to media or an empty hashset if nothing is found
             /// </returns>
-        private HashSet<string> QueryMediaFromInternalIndex()
+        private Dictionary<string, HashSet<string>> QueryMediaFromInternalIndex()
         {
+            Dictionary<string, HashSet<string>> results = new Dictionary<string, HashSet<string>>();
             HashSet<string> mediaItems = new HashSet<string>();
+            HashSet<string> badMediaItemsIDs = new HashSet<string>();
             var searchCriteria = _internalIndex.CreateSearchCriteria();
-            var query = searchCriteria.RawQuery("+__IndexType:media");
+            var query = searchCriteria.RawQuery("+__IndexType:media +__Icon: icon-picture");
             var searchResults = _internalIndex.Search(query);
+            int mediaNotUploadedItems = 0;
             if (searchResults.Any())
             {
                 foreach (var itemResult in searchResults)
                 {
-                    // \/[M|m]edia\/[0-9]+\/([^']+)
-                    // This regex pattern will match the media path within the umbracoFile entry in the examine search {src: '/media/1050/myimage.jpg', crops: []}
-                    // In the above example /media/1050/myimage.jpg will be extracted from the entry
-                    mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"[M|m]edia\/[0-9]+\/([^']+)").Value);
+                    //Neeed to ensure the examine entry has this key before accessing it
+                    if (itemResult.Fields.ContainsKey("umbracoFile"))
+                    {
+                        // \/[M|m]edia\/[0-9]+\/([^']+)
+                        // This regex pattern will match the media path within the umbracoFile entry in the examine search {src: '/media/1050/myimage.jpg', crops: []}
+                        // In the above example /media/1050/myimage.jpg will be extracted from the entry
+                        mediaItems.Add(Regex.Match(itemResult.Fields["umbracoFile"], @"[M|m]edia\/[0-9]+\/([^'|""]+)").Value);
+                    }
+                    else
+                    {
+                        //Cause is where a media item exists in Umbraco but no physical piece of media has been attached
+                        //TODO: Handle bad entries what data can we obtain from it? Maybe use the database for these
+                        mediaNotUploadedItems += 1;
+                        if (itemResult.Fields.ContainsKey("__NodeId"))
+                        {
+                            badMediaItemsIDs.Add(itemResult.Fields["__NodeId"]);
+                        }
+                        else if (itemResult.Fields.ContainsKey("id"))
+                        {
+                            badMediaItemsIDs.Add(itemResult.Fields["id"]);
+                        }
+                    }
                 }
-
-                return mediaItems;
+                results.Add("mediaItems", mediaItems);
+                results.Add("badMediaItemsIDs", badMediaItemsIDs);
+                return results;
             }
-            return new HashSet<string>();
+            return new Dictionary<string, HashSet<string>>();
         }
         #endregion
         #region Disk Checking
@@ -136,36 +164,26 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             int foundInSiteLogoContent = 0;
             int foundInMedia = 0;
             HashSet<string> mediaOnDisk = ScanMediaOnDisk();
-            HashSet<string> mediaInIndex = QueryMediaFromInternalIndex();
+            Dictionary<string, HashSet<string>> mediaExamineDictionary = QueryMediaFromInternalIndex();
+            HashSet<string> mediaInIndex = mediaExamineDictionary["mediaItems"];
+            HashSet<string> badMediaItemsIds = mediaExamineDictionary["badMediaItemsIDs"];
             HashSet<string> orphanedMediaItems = new HashSet<string>();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(_umbracoConfigPath);
+            string umbracoContent = doc.OuterXml;
+            MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
+            var mediaItemsInCache = matchList.Cast<Match>().Select(match => match.Value).ToList();
+            foreach (var matchedUmbracoContent in mediaItemsInCache)
+            {
+                //Hashset can't contain duplicates so will remove them from the results
+                mediaInIndex.Add(matchedUmbracoContent);
+            }
             foreach (var item in mediaOnDisk)
             {
 
                 if (!mediaInIndex.Contains(item))
                 {
-                    //Query the umbraco.config to see if there is any references for the specific media item within the content
-                    //TODO: Need to check for images inside siteLogo element of cache
-                    //Not found in Internal Index
-                    var mediaInCache = _umbracoCache.GetByXPath("//content[text()[contains(.,'" + item + "')]]/parent::*");
-                    if (mediaInCache.Count() != 0)
-                    {
-                        //Found in umbraco.config
-                            foundInContent += 1;
-                    }
-                    else
-                    {
-                        mediaInCache = _umbracoCache.GetByXPath("//siteLogo[text()[contains(.,'" + item + "')]]/parent::*");
-                        if (mediaInCache.Count() != 0)
-                        {
-                            foundInSiteLogoContent += 1;
-                        }
-                        else
-                        {
-                            //Not found in Content
-                            //Query CMSMedia table as a last resort
-                            orphanedMediaItems.Add(item);
-                        }
-                    }
+                    orphanedMediaItems.Add(item);
                 }
                 else
                 {
@@ -187,7 +205,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
                     ActionParameters = parameters,
                 });
             }
-            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within content, {2} in the site logo content and I found {3} items in the internal index, {4} items appear to be orphaned", mediaOnDisk.Count().ToString(), foundInContent, foundInSiteLogoContent, foundInMedia, orphanedMediaItems.Count);
+            resultMessage = String.Format("Found {0} media items on disk. I found {1} items within the Umbraco Cache, {2} items when combining the cache and examine, {3} items appear to be orphaned, I have found {4} media items that have no media uploaded", mediaOnDisk.Count().ToString(), mediaItemsInCache.Count.ToString(), foundInMedia, orphanedMediaItems.Count.ToString(), badMediaItemsIds.Count.ToString());
             return
                 new HealthCheckStatus(resultMessage)
                 {
@@ -248,8 +266,10 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
                 File.Move(source, destination);
             }
 
+            string message = _textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaSuccess");
+
             return
-                    new HealthCheckStatus(_textService.Localize("Our.Umbraco.HealthChecks/moveOrphanedMediaSuccess"))
+                    new HealthCheckStatus(message)
                     {
                         ResultType = success? StatusResultType.Success: StatusResultType.Error
                     };
