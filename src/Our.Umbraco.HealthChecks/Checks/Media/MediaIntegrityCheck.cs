@@ -4,17 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Xml;
 using Examine;
 using Examine.Providers;
 using Newtonsoft.Json.Linq;
-using Umbraco.Core.Configuration;
+using Umbraco.Core;
 using Umbraco.Core.IO;
-using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
-using Umbraco.Web;
 using Umbraco.Web.HealthCheck;
-using Umbraco.Web.PublishedCache;
 
 namespace Our.Umbraco.HealthChecks.Checks.Media
 {
@@ -25,23 +23,15 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
         Group = "Media")]
     public class MediaIntegrityCheck : HealthCheck
     {
-        private readonly UmbracoDatabase _db;
         private readonly ILocalizedTextService _textService;
         private const string MoveOrphanedMediaAction = "moveOrphanedMedia";
         //Keeping Umbraco Version and Umbraco Database for now might come in handy if I decide the query the database
-        private readonly Version _umbracoVersion;
-        private readonly IMediaService _mediaService;
-        private readonly ContextualPublishedCache _umbracoCache;
         private readonly string _webRoot;
         private readonly string _umbracoConfigPath;
         private readonly BaseSearchProvider _internalIndex;
         public MediaIntegrityCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             _textService = healthCheckContext.ApplicationContext.Services.TextService;
-            _db = healthCheckContext.ApplicationContext.DatabaseContext.Database;
-            _umbracoVersion = UmbracoVersion.Current;
-            _mediaService = healthCheckContext.ApplicationContext.Services.MediaService;
-            _umbracoCache = UmbracoContext.Current.ContentCache;
             //Temporary
             _umbracoConfigPath = IOHelper.MapPath("/App_Data/umbraco.config");
 
@@ -99,6 +89,46 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
                 return results;
             }
             return new Dictionary<string, HashSet<string>>();
+        }
+        /// <summary>
+        /// Function pulled from: https://github.com/Shazwazza/Umbraco9/blob/master/src/Umbraco.Core/StringExtensions.cs
+        /// Replaces Non Alpha Numeric Chars with a hyphen
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string ReplaceNonAlphanumericChars(string input)
+        {
+            var inputArray = input.ToCharArray();
+            var outputArray = new char[input.Length];
+            for (var i = 0; i < inputArray.Length; i++)
+                outputArray[i] = char.IsLetterOrDigit(inputArray[i]) ? inputArray[i] : '-';
+            return new string(outputArray);
+        }
+
+        private List<string> findMediaUrlsInUmbracoConfig()
+        {
+            XmlDocument doc = new XmlDocument();
+            if (File.Exists(_umbracoConfigPath))
+            {
+                doc.Load(_umbracoConfigPath);
+            }
+            else
+            {
+                //TODO: Try checking temp directory
+                var fileName = ReplaceNonAlphanumericChars(HttpRuntime.AppDomainAppId) + "-lastsynced.txt";
+                var appDomainHash = HttpRuntime.AppDomainAppId.ToSHA1();
+                var cachePath = Path.Combine(Environment.ExpandEnvironmentVariables("%temp%"), "UmbracoData",
+                    //include the appdomain hash is just a safety check, for example if a website is moved from worker A to worker B and then back
+                    // to worker A again, in theory the %temp%  folder should already be empty but we really want to make sure that its not
+                    // utilizing an old path
+                    appDomainHash);
+                string distCacheFilePath = Path.Combine(cachePath, "umbraco.config");
+                //}
+            }
+
+            string umbracoContent = doc.OuterXml;
+            MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
+            return matchList.Cast<Match>().Select(match => match.Value).ToList();
         }
         #endregion
         #region Disk Checking
@@ -168,11 +198,11 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             HashSet<string> mediaInIndex = mediaExamineDictionary["mediaItems"];
             HashSet<string> badMediaItemsIds = mediaExamineDictionary["badMediaItemsIDs"];
             HashSet<string> orphanedMediaItems = new HashSet<string>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(_umbracoConfigPath);
-            string umbracoContent = doc.OuterXml;
-            MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
-            var mediaItemsInCache = matchList.Cast<Match>().Select(match => match.Value).ToList();
+            //XmlDocument doc = new XmlDocument();
+            //doc.Load(_umbracoConfigPath);
+            //string umbracoContent = doc.OuterXml;
+            //MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
+            var mediaItemsInCache = findMediaUrlsInUmbracoConfig(); //matchList.Cast<Match>().Select(match => match.Value).ToList();
             foreach (var matchedUmbracoContent in mediaItemsInCache)
             {
                 //Hashset can't contain duplicates so will remove them from the results
