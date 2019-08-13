@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,29 +26,61 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
     {
         private readonly ILocalizedTextService _textService;
         private const string MoveOrphanedMediaAction = "moveOrphanedMedia";
-        //Keeping Umbraco Version and Umbraco Database for now might come in handy if I decide the query the database
         private readonly string _webRoot;
         private readonly string _umbracoConfigPath;
         private readonly BaseSearchProvider _internalIndex;
+        private readonly string _umbracoLocalTempStorage;
         public MediaIntegrityCheck(HealthCheckContext healthCheckContext) : base(healthCheckContext)
         {
             _textService = healthCheckContext.ApplicationContext.Services.TextService;
-            //Temporary
-            _umbracoConfigPath = IOHelper.MapPath("/App_Data/umbraco.config");
-
+            _umbracoLocalTempStorage = ConfigurationManager.AppSettings["umbracoLocalTempStorage"];
             _webRoot = IOHelper.MapPath("/");
             _internalIndex = ExamineManager.Instance.SearchProviderCollection["InternalSearcher"];
+            _umbracoConfigPath = GetUmbracoConfigPath();
         }
+
         #region Discovery
-            /// <summary>
-            /// Will query the Examine InternalIndex for media items
-            /// A media item has the key __IndexType with the value of media
-            /// So we query for items in the index using this key and were able to pull all media from examine
-            /// We then apply some regex to grab just the path to the media item and store it in a hashset
-            /// </summary>
-            /// <returns>
-            /// A hashset containing paths to media or an empty hashset if nothing is found
-            /// </returns>
+        /// <summary>
+        /// Checks the umbracoLocalTempStorage app setting to determine where the Umbraco.config file is
+        /// </summary>
+        /// <returns>String containing the full path to the umbraco.config</returns>
+        private string GetUmbracoConfigPath()
+        {
+            string umbracoXMLConfigPath ="";
+            //Default location
+            if (_umbracoLocalTempStorage == "EnvironmentTemp")
+            {
+                //TODO: Try checking temp directory
+                var appDomainHash = HttpRuntime.AppDomainAppId.ToSHA1();
+                var cachePath = Path.Combine(Environment.ExpandEnvironmentVariables("%temp%"), "UmbracoData",
+                    //include the appdomain hash is just a safety check, for example if a website is moved from worker A to worker B and then back
+                    // to worker A again, in theory the %temp%  folder should already be empty but we really want to make sure that its not
+                    // utilizing an old path
+                    appDomainHash); 
+                umbracoXMLConfigPath = Path.Combine(cachePath, "umbraco.config");
+            }
+            else if (_umbracoLocalTempStorage == "AspNetTemp")
+            {
+                var aspNetPath = System.Web.HttpRuntime.CodegenDir;
+                umbracoXMLConfigPath = Path.Combine(aspNetPath, "UmbracoData", "umbraco.config");
+            }
+            else
+            {
+                umbracoXMLConfigPath = IOHelper.MapPath("/App_Data/umbraco.config");
+            }
+            
+            return umbracoXMLConfigPath;
+        }
+        
+        /// <summary>
+        /// Will query the Examine InternalIndex for media items
+        /// A media item has the key __IndexType with the value of media
+        /// So we query for items in the index using this key and were able to pull all media from examine
+        /// We then apply some regex to grab just the path to the media item and store it in a hashset
+        /// </summary>
+        /// <returns>
+        /// A hashset containing paths to media or an empty hashset if nothing is found
+        /// </returns>
         private Dictionary<string, HashSet<string>> QueryMediaFromInternalIndex()
         {
             Dictionary<string, HashSet<string>> results = new Dictionary<string, HashSet<string>>();
@@ -91,44 +124,21 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             return new Dictionary<string, HashSet<string>>();
         }
         /// <summary>
-        /// Function pulled from: https://github.com/Shazwazza/Umbraco9/blob/master/src/Umbraco.Core/StringExtensions.cs
-        /// Replaces Non Alpha Numeric Chars with a hyphen
+        /// Performs a regex query on the Umbraco.config to look for media file paths in the content
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private string ReplaceNonAlphanumericChars(string input)
-        {
-            var inputArray = input.ToCharArray();
-            var outputArray = new char[input.Length];
-            for (var i = 0; i < inputArray.Length; i++)
-                outputArray[i] = char.IsLetterOrDigit(inputArray[i]) ? inputArray[i] : '-';
-            return new string(outputArray);
-        }
-
+        /// <returns>A List<string> containing paths to media found in the Umbraco config</string></returns>
         private List<string> findMediaUrlsInUmbracoConfig()
         {
             XmlDocument doc = new XmlDocument();
             if (File.Exists(_umbracoConfigPath))
             {
                 doc.Load(_umbracoConfigPath);
-            }
-            else
-            {
-                //TODO: Try checking temp directory
-                var fileName = ReplaceNonAlphanumericChars(HttpRuntime.AppDomainAppId) + "-lastsynced.txt";
-                var appDomainHash = HttpRuntime.AppDomainAppId.ToSHA1();
-                var cachePath = Path.Combine(Environment.ExpandEnvironmentVariables("%temp%"), "UmbracoData",
-                    //include the appdomain hash is just a safety check, for example if a website is moved from worker A to worker B and then back
-                    // to worker A again, in theory the %temp%  folder should already be empty but we really want to make sure that its not
-                    // utilizing an old path
-                    appDomainHash);
-                string distCacheFilePath = Path.Combine(cachePath, "umbraco.config");
-                //}
-            }
+                string umbracoContent = doc.OuterXml;
 
-            string umbracoContent = doc.OuterXml;
-            MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
-            return matchList.Cast<Match>().Select(match => match.Value).ToList();
+                MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
+                return matchList.Cast<Match>().Select(match => match.Value).ToList();
+            }
+            return new List<string>();
         }
         #endregion
         #region Disk Checking
@@ -198,11 +208,7 @@ namespace Our.Umbraco.HealthChecks.Checks.Media
             HashSet<string> mediaInIndex = mediaExamineDictionary["mediaItems"];
             HashSet<string> badMediaItemsIds = mediaExamineDictionary["badMediaItemsIDs"];
             HashSet<string> orphanedMediaItems = new HashSet<string>();
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load(_umbracoConfigPath);
-            //string umbracoContent = doc.OuterXml;
-            //MatchCollection matchList = Regex.Matches(umbracoContent, @"[M|m]edia\/[0-9]+\/([^'|"" |\]|\)]+)");
-            var mediaItemsInCache = findMediaUrlsInUmbracoConfig(); //matchList.Cast<Match>().Select(match => match.Value).ToList();
+            var mediaItemsInCache = findMediaUrlsInUmbracoConfig();
             foreach (var matchedUmbracoContent in mediaItemsInCache)
             {
                 //Hashset can't contain duplicates so will remove them from the results
