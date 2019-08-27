@@ -4,14 +4,15 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Paul Seal, Ian Houghton, Laura Weatherhead, Marc Goodson</authors>
+    <authors>Paul Seal, Ian Houghton, Laura Weatherhead, Marc Goodson, Matthew Hart</authors>
     <owners>Paul Seal</owners>
-    <licenseUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/</projectUrl>
     <iconUrl>https://github.com/prjseal/Our.Umbraco.HealthChecks/blob/master/images/health-check.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
+      - added media integrity check
       - added client dependency version check
     </releaseNotes>
     <copyright>$copyright$</copyright>
