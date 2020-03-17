@@ -33,7 +33,7 @@ If you are looking for the Umbraco v7 version then switch to the dev/v7 branch
 | UmbracoPathCheck             | Checks to see if you have changed the umbraco path.                    |467EFE42-E37D-47FE-A75F-E2D7D2D98438|
 | **Security**                 |                                                                        |     |
 | AdminUserCheck               | Check the admin user isn't called 'admin'                              |42A3A15F-C2F0-48E7-AE5A-1237C5AF5E35|
-| ClientDependencyVersionCheck | Check the admin user isn't called 'admin'                              |C6D425DF-47A6-4526-A915-AAA39192634D|
+| ClientDependencyVersionCheck | Check the version number of ClientDepency.Core.dll                     |C6D425DF-47A6-4526-A915-AAA39192634D|
 
 ## The following Umbraco v7 checks were removed from the Umbraco v8 version:
 
