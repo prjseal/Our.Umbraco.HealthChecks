@@ -24,15 +24,16 @@ If you are looking for the Umbraco v7 version then switch to the dev/v7 branch
 ## Checks ported to the Umbraco v8 version:
 
 | Check                 | Description                                                            | Id  |
-| --------------------- |:---------------------------------------------------------------------- | --- |
-| **Azure**             |                                                                        |     |
-| AzureFcnModeCheck     | Checks that fcnMode config is appropriate for the Azure platform.      |EA9619FE-1DF4-4399-A4E5-32F2CF0CDC1F|
-| AzureTempStorageCheck | Checks that temp storage config is appropriate for the Azure platform. |F9088377-103A-4712-B428-D4AB6E5B2A67|
-| **Config**            |                                                                        |     |
-| PostProcessorCheck    | Check if ImageProcessor.Web.PostProcessor is installed                 |CA765D50-85D9-4346-BBC4-8DEEBB7EBAE2|
-| UmbracoPathCheck      | Checks to see if you have changed the umbraco path.                    |467EFE42-E37D-47FE-A75F-E2D7D2D98438|
-| **Security**          |                                                                        |     |
-| AdminUserCheck        | Check the admin user isn't called 'admin'                              |42a3a15f-c2f0-48e7-ae5a-1237c5af5e35|
+| ---------------------------- |:---------------------------------------------------------------------- | --- |
+| **Azure**                    |                                                                        |     |
+| AzureFcnModeCheck            | Checks that fcnMode config is appropriate for the Azure platform.      |EA9619FE-1DF4-4399-A4E5-32F2CF0CDC1F|
+| AzureTempStorageCheck        | Checks that temp storage config is appropriate for the Azure platform. |F9088377-103A-4712-B428-D4AB6E5B2A67|
+| **Config**                   |                                                                        |     |
+| PostProcessorCheck           | Check if ImageProcessor.Web.PostProcessor is installed                 |CA765D50-85D9-4346-BBC4-8DEEBB7EBAE2|
+| UmbracoPathCheck             | Checks to see if you have changed the umbraco path.                    |467EFE42-E37D-47FE-A75F-E2D7D2D98438|
+| **Security**                 |                                                                        |     |
+| AdminUserCheck               | Check the admin user isn't called 'admin'                              |42A3A15F-C2F0-48E7-AE5A-1237C5AF5E35|
+| ClientDependencyVersionCheck | Check the admin user isn't called 'admin'                              |C6D425DF-47A6-4526-A915-AAA39192634D|
 
 ## The following Umbraco v7 checks were removed from the Umbraco v8 version:
 
@@ -51,7 +52,6 @@ If you are looking for the Umbraco v7 version then switch to the dev/v7 branch
 | **Security**                 |                                                                   |
 | HstsCheck                    | Exists in Core                                                    |
 | TlsCheck                     | Exists in Core                                                    |
-| ClientDependencyVersionCheck | Removed because of no current vulnerabilities in Umbraco v8       |
 
 ## Suggest Checks
 

@@ -235,6 +235,7 @@
     <Compile Include="Checks\Config\PostProcessorCheck.cs" />
     <Compile Include="Checks\Config\UmbracoPathCheck.cs" />
     <Compile Include="Checks\Security\AdminUserCheck.cs" />
+    <Compile Include="Checks\Security\ClientDependencyVersionCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
