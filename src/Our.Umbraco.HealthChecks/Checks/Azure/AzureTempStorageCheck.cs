@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Configuration;
-using Umbraco.Core.Services;
+using Umbraco.Core.Configuration;
 using Umbraco.Web.HealthCheck;
 
 namespace Our.Umbraco.HealthChecks.Checks.Azure
@@ -11,10 +11,17 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
     Group = "Azure")]
     public class AzureTempStorageCheck : HealthCheck
     {
+        private readonly IGlobalSettings _globalSettings;
+
+        public AzureTempStorageCheck(IGlobalSettings globalSettings)
+        {
+            _globalSettings = globalSettings;
+        }
+
         public override IEnumerable<HealthCheckStatus> GetStatus()
         {
             //return the statuses
-            return new[] { CheckTempStorage() };
+            return new[] { CheckTempStorage(_globalSettings) };
         }
 
         public override HealthCheckStatus ExecuteAction(HealthCheckAction action)
@@ -22,10 +29,16 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
             throw new InvalidOperationException("UmbracoPathCheck has no executable actions");
         }
 
-        private static HealthCheckStatus CheckTempStorage()
+        private static HealthCheckStatus CheckTempStorage(IGlobalSettings globalSettings)
         {
             var matchingValue = "EnvironmentTemp";
-            var appSetting = "umbracoLocalTempStorage";
+
+            var umbracoVersion = globalSettings.ConfigurationStatus.Split('.');
+            var umbMajorVersion = int.Parse(umbracoVersion[0]);
+
+            var appSetting = umbMajorVersion > 7 
+                ? "Umbraco.Core.LocalTempStorage" 
+                : "umbracoLocalTempStorage";
 
             var tempStorageSetting = WebConfigurationManager.AppSettings[appSetting];
 
@@ -38,6 +51,5 @@ namespace Our.Umbraco.HealthChecks.Checks.Azure
                     Actions = new List<HealthCheckAction>()
                 };
         }
-
     }
 }
