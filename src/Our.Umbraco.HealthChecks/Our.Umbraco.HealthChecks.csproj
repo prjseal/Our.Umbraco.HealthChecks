@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -210,6 +210,7 @@
     <Compile Include="Checks\Azure\AzureTempStorageCheck.cs" />
     <Compile Include="Checks\Config\PostProcessorCheck.cs" />
     <Compile Include="Checks\DataIntegrity\ContentVersionsCheck.cs" />
+    <Compile Include="Checks\Data\UrlDomainHealthcheck.cs" />
     <Compile Include="Checks\Media\MediaIntegrityCheck.cs" />
     <Compile Include="Checks\Security\ClientDependencyVersionCheck.cs" />
     <Compile Include="Checks\Security\HstsCheck.cs" />
@@ -219,6 +220,8 @@
     <Compile Include="Checks\SEO\XmlSitemapCheck.cs" />
     <Compile Include="Checks\SEO\LoremIpsumCheck.cs" />
     <Compile Include="Checks\Config\ExamineRebuildOnStartCheck.cs" />
+    <Compile Include="Controllers\UrlDomainReportController.cs" />
+    <Compile Include="Models\PropertyDataDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
